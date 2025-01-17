@@ -10,3 +10,5 @@ class OnlyGuests(permissions.BasePermission):
         
         if(request.COOKIES.get("user_r")):
             return False
+        
+        return True

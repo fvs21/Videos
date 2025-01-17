@@ -3,6 +3,8 @@ from datetime import timedelta, timezone
 from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth.models import BaseUserManager
 
+from image.models import Image
+
 # Create your models here.
 
 class UserManager(BaseUserManager):
@@ -39,6 +41,8 @@ class User(AbstractBaseUser):
     email_verified_at = models.DateTimeField(null=True, blank=True)
     phone_verified_at = models.DateTimeField(null=True, blank=True)
 
+    profile_picture = models.ForeignKey(Image, on_delete=models.CASCADE, null=True, blank=True)
+
     USERNAME_FIELD = "username"
     REQUIRED_FIELDS = ["email", "full_name", "date_of_birth", "password"]
 
@@ -55,6 +59,11 @@ class User(AbstractBaseUser):
     
     def get_email_verification_code(self) -> str:
         return VerificationData.objects.get(user=self, field="email").code
+
+    def pfp_url(self) -> str:
+        if self.profile_picture is None:
+            return "/api/image/default-pfp.jpg"
+        return self.profile_picture.image_url
     
 class VerificationData(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -63,7 +72,7 @@ class VerificationData(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:
-        return f"{self.user.username}: {self.code}"
+        return f"{self.user.username} for {self.field}: {self.code}"
     
     def can_request_new_code(self) -> bool:
         return self.created_at + timedelta(minutes=5) < timezone.now()

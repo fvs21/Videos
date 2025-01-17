@@ -52,6 +52,8 @@ REST_FRAMEWORK = {
 
 INSTALLED_APPS = [
     'authentication.apps.AuthenticationConfig',
+    'image.apps.ImageConfig',
+    'user.apps.UserConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

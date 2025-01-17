@@ -1,4 +1,3 @@
-from django.views import View
 from rest_framework.decorators import api_view
 from django.http import HttpRequest
 from django.http import JsonResponse

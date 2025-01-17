@@ -1,4 +1,5 @@
-from .serializers import RegistrationSerializer, UserSerializer
+from .serializers import RegistrationSerializer
+from user.serializers import UserSerializer
 from .models import VerificationData
 from django.http import JsonResponse
 from .exceptions import *
@@ -62,11 +63,10 @@ def register_user(request: HttpRequest) -> JsonResponse:
 
 def login_user(request: HttpRequest) -> JsonResponse:
     json = JSONParser().parse(request)
-    print(json)
     username = json.get("username")
     password = json.get("password")
 
-    user = authenticate(username=username, password=password)
+    user: User = authenticate(username=username, password=password)
 
     if user is None:
         raise AuthenticationException("Invalid credentials", 400)

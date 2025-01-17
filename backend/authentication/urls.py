@@ -8,5 +8,5 @@ urlpatterns = [
     path('session', views.AuthenticatedAuthViewSet.as_view({'get': 'session'}), name="session"),
     path('refresh', views.refresh, name="refresh"),
     path('verify-email', views.AuthenticatedAuthViewSet.as_view({'post': 'verify_email'}), name="verify-email"),
-    path('/email/code', views.AuthenticatedAuthViewSet.as_view({'post': 'request_email_verification_code'}), name="request-email-verification-code"),
+    path('email/code', views.AuthenticatedAuthViewSet.as_view({'post': 'request_email_verification_code'}), name="request-email-verification-code"),
 ]

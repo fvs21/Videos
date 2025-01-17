@@ -5,6 +5,7 @@ from django.http import JsonResponse
 class DefaultException(exceptions.APIException):
     def __init__(self, detail=None,status_code=None, code=None):
         super().__init__(detail, status_code)
+        self.status_code = status_code
         self.code = code
 
 def custom_exception_handler(exc, context):
