@@ -1,3 +1,83 @@
+from datetime import timedelta, timezone
 from django.db import models
+from django.contrib.auth.models import AbstractBaseUser
+from django.contrib.auth.models import BaseUserManager
+
+from image.models import Image
 
 # Create your models here.
+class UserManager(BaseUserManager):
+    def create_user(self, username, email, full_name, date_of_birth, password=None, **extra_fields):
+        if not email:
+            raise ValueError('The Email field must be set')
+        
+        email = self.normalize_email(email)
+        user = self.model(username=username, email=email, full_name=full_name, date_of_birth=date_of_birth, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, username, email, full_name, date_of_birth, password=None, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+
+        if extra_fields.get('is_staff') is not True:
+            raise ValueError('Superuser must have is_staff=True.')
+        if extra_fields.get('is_superuser') is not True:
+            raise ValueError('Superuser must have is_superuser=True.')
+
+        return self.create_user(username, email, full_name, date_of_birth, password, **extra_fields)
+
+class User(AbstractBaseUser):
+    username = models.CharField(max_length=30, unique=True)
+    email = models.EmailField(max_length=254, unique=True)
+    full_name = models.CharField(max_length=30)
+    date_of_birth = models.DateField()
+
+    country_code = models.IntegerField(null=True, blank=True)
+    phone = models.CharField(max_length=15, unique=True, null=True, blank=True)
+
+    email_verified_at = models.DateTimeField(null=True, blank=True)
+    phone_verified_at = models.DateTimeField(null=True, blank=True)
+
+    profile_picture = models.ForeignKey(Image, on_delete=models.CASCADE, null=True, blank=True)
+
+    bio = models.CharField(max_length=200)
+
+    password_reset_token = models.CharField(max_length=128, null=True, blank=True)
+    password_reset_token_created_at = models.DateTimeField(null=True, blank=True)
+    password_updated_at = models.DateTimeField(null=True, blank=True)
+
+    USERNAME_FIELD = "username"
+    REQUIRED_FIELDS = ["email", "full_name", "date_of_birth", "password"]
+
+    objects = UserManager()
+
+    def __str__(self) -> str:
+        return f"{self.full_name}: {self.get_username()}"
+    
+    def has_email_verified(self) -> bool:
+        return self.email_verified_at is not None
+
+    def has_phone_verified(self) -> bool:
+        return self.phone_verified_at is not None
+    
+    def get_email_verification_code(self) -> str:
+        return VerificationData.objects.get(user=self, field="email").code
+
+    def pfp_url(self) -> str:
+        if self.profile_picture is None:
+            return "/api/image/default-pfp.jpg"
+        return self.profile_picture.image_url
+
+class VerificationData(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    field = models.CharField(choices=[("email", "email"), ("phone", "phone")], max_length=5)
+    code = models.CharField(max_length=128) # hashed code
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self) -> str:
+        return f"{self.user.username} for {self.field}: {self.code}"
+    
+    def can_request_new_code(self) -> bool:
+        return self.created_at + timedelta(minutes=5) < timezone.now()

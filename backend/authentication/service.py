@@ -1,11 +1,11 @@
 from .serializers import RegistrationSerializer
 from user.serializers import UserSerializer
-from .models import VerificationData
+from user.models import VerificationData
 from django.http import JsonResponse
 from .exceptions import *
 from django.http import HttpRequest
 from rest_framework.parsers import JSONParser
-from .models import User
+from user.models import User
 from rest_framework_simplejwt.tokens import RefreshToken
 from backend.settings import REFRESH_TOKEN_DURATION
 from django.contrib.auth import authenticate
@@ -137,3 +137,8 @@ def resend_email_verification_code(request: HttpRequest) -> JsonResponse:
     logging.info(f"Verification code for {user.email}: {verification_code}")
 
     return JsonResponse({"message": "Verification code sent"}, status=200)
+
+def generate_and_send_password_reset_token(request: HttpRequest) -> JsonResponse:
+    pass
+
+   
