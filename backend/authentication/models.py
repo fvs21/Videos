@@ -1,23 +1,51 @@
 from django.db import models
 from datetime import timedelta, timezone
 from django.contrib.auth.models import AbstractBaseUser
+from django.contrib.auth.models import BaseUserManager
 
 # Create your models here.
+
+class UserManager(BaseUserManager):
+    def create_user(self, username, email, full_name, date_of_birth, password=None, **extra_fields):
+        if not email:
+            raise ValueError('The Email field must be set')
+        
+        email = self.normalize_email(email)
+        user = self.model(username=username, email=email, full_name=full_name, date_of_birth=date_of_birth, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, username, email, full_name, date_of_birth, password=None, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+
+        if extra_fields.get('is_staff') is not True:
+            raise ValueError('Superuser must have is_staff=True.')
+        if extra_fields.get('is_superuser') is not True:
+            raise ValueError('Superuser must have is_superuser=True.')
+
+        return self.create_user(username, email, full_name, date_of_birth, password, **extra_fields)
+
 class User(AbstractBaseUser):
+    username = models.CharField(max_length=30, unique=True)
     email = models.EmailField(max_length=254, unique=True)
     full_name = models.CharField(max_length=30)
     date_of_birth = models.DateField()
 
-    country_code = models.IntegerField()
-    phone = models.CharField(max_length=15, unique=True)
+    country_code = models.IntegerField(null=True, blank=True)
+    phone = models.CharField(max_length=15, unique=True, null=True, blank=True)
 
     email_verified_at = models.DateTimeField(null=True, blank=True)
     phone_verified_at = models.DateTimeField(null=True, blank=True)
 
-    REQUIRED_FIELDS = ["email", "first_name", "last_name", "date_of_birth"]
+    USERNAME_FIELD = "username"
+    REQUIRED_FIELDS = ["email", "full_name", "date_of_birth", "password"]
+
+    objects = UserManager()
 
     def __str__(self) -> str:
-        return f"{self.first_name} {self.last_name}: {self.get_username()}"
+        return f"{self.full_name}: {self.get_username()}"
     
     def has_email_verified(self) -> bool:
         return self.email_verified_at is not None
