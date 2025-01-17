@@ -17,3 +17,10 @@ class UserDoesNotExistException(DefaultException):
 
     def __init__(self, detail="User was not found", status_code=404):
         super().__init__(detail, status_code, self.code)
+
+class VerificationException(DefaultException):
+    code = "verification_failure"
+
+    def __init__(self, detail=None, status_code=400):
+        super().__init__(detail, status_code, self.code)
+        

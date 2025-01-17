@@ -1,12 +1,12 @@
 from django.urls import path, include
 from . import views
-from rest_framework.routers import DefaultRouter
 
 urlpatterns = [
     path('register', views.AuthenticationViewSet.as_view({'post': 'register'}), name="register"),
     path('login', views.AuthenticationViewSet.as_view({'post': 'login'}), name="login"),
-    path('logout', views.AuthenticationViewSet.as_view({'post': 'logout'}), name="logout"),
+    path('logout', views.AuthenticatedAuthViewSet.as_view({'post': 'logout'}), name="logout"),
     path('session', views.AuthenticatedAuthViewSet.as_view({'get': 'session'}), name="session"),
-    path('refresh', views.AuthenticationViewSet.as_view({'post': 'refresh'}), name="refresh"),
-    
+    path('refresh', views.refresh, name="refresh"),
+    path('verify-email', views.AuthenticatedAuthViewSet.as_view({'post': 'verify_email'}), name="verify-email"),
+    path('/email/code', views.AuthenticatedAuthViewSet.as_view({'post': 'request_email_verification_code'}), name="request-email-verification-code"),
 ]

@@ -1,12 +1,17 @@
 from .serializers import RegistrationSerializer, UserSerializer
+from .models import VerificationData
 from django.http import JsonResponse
-from .exceptions import RegistrationException, AuthenticationException, UserDoesNotExistException
+from .exceptions import *
 from django.http import HttpRequest
 from rest_framework.parsers import JSONParser
 from .models import User
 from rest_framework_simplejwt.tokens import RefreshToken
 from backend.settings import REFRESH_TOKEN_DURATION
 from django.contrib.auth import authenticate
+from .utils import AuthenticationUtils
+from django.contrib.auth.hashers import make_password, check_password
+import logging
+from django.utils import timezone
 
 def generate_tokens_for_user(user: User) -> dict[str, str]:
     refresh_token = RefreshToken.for_user(user)
@@ -45,6 +50,13 @@ def register_user(request: HttpRequest) -> JsonResponse:
         raise RegistrationException(data.errors, 400)
     
     user = data.save()
+
+    verification_code = AuthenticationUtils.generate_verification_code()
+    verification_data = VerificationData(user=user, field="email", code=make_password(verification_code))
+    verification_data.save()
+
+    logging.info(f"Verification code for {user.email}: {verification_code}")
+
     return generate_authentication_response(user)
 
 
@@ -67,7 +79,7 @@ def get_session(request: HttpRequest) -> JsonResponse:
     user: User = get_user_by_id(request.user.id)
     return JsonResponse(UserSerializer(user).data, status=200)
 
-def get_user_by_id(id: int) -> User | None:
+def get_user_by_id(id: int) -> User:
     try:
         return User.objects.get(id=id)
     except User.DoesNotExist:
@@ -85,3 +97,43 @@ def logout_user(request: HttpRequest) -> JsonResponse:
     newToken = RefreshToken(refresh_token)
     newToken.blacklist()
     return JsonResponse({"message", "Succesfully logged out"}, status=200)
+
+def check_email_verification(request: HttpRequest) -> JsonResponse:
+    user: User = get_user_by_id(request.user.id)
+
+    verification_data = VerificationData.objects.filter(user=user, field="email").first()
+
+    if verification_data is None:
+        raise VerificationException("Email is already verified", 409) 
+    
+    verification_code = request.GET.get("code")
+
+    if verification_code is None:
+        raise VerificationException("No verification code provided", 400)
+
+    if check_password(verification_code, verification_data.code):
+        user.email_verified_at = timezone.now()
+        user.save()
+
+        verification_data.delete()
+
+        return JsonResponse({"message": "Email verified"}, status=200)
+    
+def resend_email_verification_code(request: HttpRequest) -> JsonResponse:
+    user: User = get_user_by_id(request.user.id)
+
+    verification_data = VerificationData.objects.filter(user=user, field="email").first()
+
+    if verification_data is None:
+        raise VerificationException("Email is already verified", 409)
+    
+    if not verification_data.can_request_new_code():
+        raise VerificationException("You need to wait 5 minutes to request a new verification code", 429)
+    
+    verification_code = AuthenticationUtils.generate_verification_code()
+    verification_data.code = make_password(verification_code)
+    verification_data.save()
+
+    logging.info(f"Verification code for {user.email}: {verification_code}")
+
+    return JsonResponse({"message": "Verification code sent"}, status=200)
