@@ -12,6 +12,12 @@ class AuthenticationException(DefaultException):
     def __init__(self, detail=None, status_code=400):
         super().__init__(detail, status_code, self.code)
 
+class RefreshTokenException(DefaultException):
+    code = "refresh_token_failure"
+
+    def __init__(self, detail=None, status_code=409):
+        super().__init__(detail, status_code, self.code)
+
 class UserDoesNotExistException(DefaultException):
     code = "user_not_found"
 
@@ -23,4 +29,9 @@ class VerificationException(DefaultException):
 
     def __init__(self, detail=None, status_code=400):
         super().__init__(detail, status_code, self.code)
-        
+
+class ResetPasswordException(DefaultException):
+    code = "reset_password_failure"
+
+    def __init__(self, detail=None, status_code=400):
+        super().__init__(detail, status_code, self.code)

@@ -70,6 +70,18 @@ class User(AbstractBaseUser):
             return "/api/image/default-pfp.jpg"
         return self.profile_picture.image_url
 
+    def set_password_reset_token(self, token: str) -> None: #hashed token
+        self.password_reset_token = token
+        self.password_reset_token_created_at = timezone.now()
+        self.save()
+
+    def reset_password(self, new_password: str) -> None:
+        self.set_password(new_password)
+        self.password_reset_token = None
+        self.password_reset_token_created_at = None
+        self.password_updated_at = timezone.now()
+        self.save()
+
 class VerificationData(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     field = models.CharField(choices=[("email", "email"), ("phone", "phone")], max_length=5)

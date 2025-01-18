@@ -17,6 +17,14 @@ class AuthenticationViewSet(viewsets.ViewSet):
     @action(methods=["POST"], detail=False)
     def register(self, request: HttpRequest) -> JsonResponse:
         return service.register_user(request)
+    
+    @action(methods=["POST"], detail=False)
+    def forgot_password(self, request: HttpRequest) -> JsonResponse:
+        return service.generate_and_send_password_reset_token(request)
+
+    @action(methods=['POST'], detail=False)
+    def reset_password(self, request: HttpRequest) -> JsonResponse:
+        return service.reset_password(request)
 
 
 class AuthenticatedAuthViewSet(viewsets.ViewSet):
@@ -33,10 +41,7 @@ class AuthenticatedAuthViewSet(viewsets.ViewSet):
     @action(methods=["POST"], detail=False)
     def verify_email(self, request: HttpRequest) -> JsonResponse:
         return service.check_email_verification(request)
-    
-    @action(methods=["POST"], detail=False)
-    def request_email_verification_code(self, request: HttpRequest) -> JsonResponse:
-        return service.request_email_verification_code(request)
+
     
 @api_view(["GET"])
 def refresh(request: HttpRequest) -> JsonResponse:

@@ -1,4 +1,4 @@
-from .serializers import RegistrationSerializer
+from .serializers import RegistrationSerializer, ResetPasswordSerializer
 from user.serializers import UserSerializer
 from user.models import VerificationData
 from django.http import JsonResponse
@@ -13,6 +13,7 @@ from .utils import AuthenticationUtils
 from django.contrib.auth.hashers import make_password, check_password
 import logging
 from django.utils import timezone
+from typing import Optional
 
 def generate_tokens_for_user(user: User) -> dict[str, str]:
     refresh_token = RefreshToken.for_user(user)
@@ -88,6 +89,9 @@ def get_user_by_id(id: int) -> User:
 def refresh_token(request: HttpRequest) -> JsonResponse:
     refresh_token = request.COOKIES.get("user_r")
 
+    if RefreshToken(refresh_token).check_blacklist():
+        raise RefreshTokenException("Token blacklisted", 409)
+
     newToken = RefreshToken(refresh_token)
     return JsonResponse({"access_token": str(newToken.access_token)}, status=200)
 
@@ -138,7 +142,51 @@ def resend_email_verification_code(request: HttpRequest) -> JsonResponse:
 
     return JsonResponse({"message": "Verification code sent"}, status=200)
 
-def generate_and_send_password_reset_token(request: HttpRequest) -> JsonResponse:
-    pass
+def get_user_by_unknown_credential(credential: str) -> Optional[User]:
+    credential_type = AuthenticationUtils.determine_credential_type(credential)
 
-   
+    if credential_type == "email":
+        return User.objects.filter(email=credential).first()
+    elif credential_type == "phone":
+        return User.objects.filter(phone=credential).first()
+    
+    return None
+
+def generate_and_send_password_reset_token(request: HttpRequest) -> JsonResponse:
+    json = JSONParser().parse(request)
+    credential = json.get('credential')
+    user = get_user_by_unknown_credential(credential)
+
+    if user is None:
+        raise UserDoesNotExistException()
+    
+    password_reset_token: str = AuthenticationUtils.generate_verification_code()
+
+    user.password_reset_token = make_password(password_reset_token)
+    user.password_reset_token_created_at = timezone.now()
+
+    print(f"Password reset token for {user.email}: {password_reset_token}")
+
+    #send email or sms
+
+    user.save()
+
+    return JsonResponse({"message": "Password reset token sent"}, status=200)
+
+def reset_password(request: HttpRequest) -> JsonResponse:
+    json = JSONParser.parse(request)
+    data = ResetPasswordSerializer(data=json)
+
+    data.validate()
+
+    user = get_user_by_unknown_credential(data.credential)
+
+    if user is None:
+        raise UserDoesNotExistException()
+    
+    if not check_password(data.password_reset_token, user.password_reset_token):
+        raise ResetPasswordException("Invalid password reset token", 400)
+    
+    user.reset_password(data.new_password)
+
+    return JsonResponse({"message": "Password reset successful"}, status=200)
