@@ -24,6 +24,7 @@ export default function ThemedTextInput({ value, setValue, className, placeholde
             placeholder={placeholder} 
             textContentType={textContentType}
             secureTextEntry={textContentType === 'password'}
+            placeholderTextColor={isDark ? Colors.dark.inputTextColor : Colors.light.inputTextColor}
         />
     )
 }

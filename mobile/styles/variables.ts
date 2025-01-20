@@ -2,7 +2,7 @@ export const Colors = {
     primary300: "#3BCBB7",
     primary200: "rgba(59, 203, 183, 0.6)",
     primary100: "rgba(59, 203, 183, 0.25)",
-    secondary300: "#3BCBB7",
+    secondary300: "#rgba(50, 109, 101, 1)",
     secondary200: "rgba(50, 109, 101, 0.6)",
     secondary100: "rgba(50, 109, 101, 0.25)",
     danger: "#F75555",
@@ -17,7 +17,8 @@ export const Colors = {
         icon: "#687076",
         tabIconDefault: "#687076",
         tabIconSelected: "#0a7ea4",
-        inputColor: "#f5f5f5"
+        inputColor: "#f5f5f5",
+        inputTextColor: "#7d7d7d"
     },
 
     dark: {
@@ -30,6 +31,7 @@ export const Colors = {
         white100: "#ECEDEE",
         white200: "#F7F8FA",
         white300: "#F7F8FA",
-        inputColor: "#1f2024"
+        inputColor: "#1f2024",
+        inputTextColor: "#949494"
     }
 }

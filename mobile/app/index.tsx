@@ -1,8 +1,9 @@
-import { Image, SafeAreaView, Text, useColorScheme, View } from 'react-native';
+import { Image, SafeAreaView, Text, TouchableOpacity, useColorScheme, View } from 'react-native';
 import { styles } from './index.style';
 import icon from "@/assets/images/icon.png";
 import ThemedTextInput from '@/components/ThemedTextInput';
 import { useState } from 'react';
+import { Link, router } from 'expo-router';
 
 export default function Index() {
   const theme = useColorScheme() ?? 'light';
@@ -33,6 +34,17 @@ export default function Index() {
           keyboardType='default'
           textContentType='password' 
         />
+        <TouchableOpacity style={styles.loginButton}>
+          <Text style={styles.loginButtonText}>Log in</Text>
+        </TouchableOpacity>
+        <Link href={'/forgot-password'} style={styles.forgotButton}>
+          Forgot password?
+        </Link>
+      </View>
+      <View style={styles.footer}>
+        <TouchableOpacity style={styles.registerButton} onPress={() => router.push('/register')}>
+          <Text style={styles.registerButtonText}>Create account</Text>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   )
