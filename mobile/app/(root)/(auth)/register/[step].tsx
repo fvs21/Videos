@@ -1,12 +1,13 @@
 import { ThemedText } from '@/components/ThemedText'
-import React from 'react'
-import { View } from 'react-native'
+import { Text, View } from 'react-native'
 import { styles } from './register.style'
-import ThemedTextInput from '@/components/ThemedTextInput'
 import ThemedSafeAreaView from '@/components/ThemedSafeAreaView'
-import RegistrationForm from '@/features/registration/components/Registration/RegistrationForm'
+import { useLocalSearchParams } from 'expo-router'
+import { determineRegistrationStep } from '@/features/registration/utils'
 
 export default function Register() {
+  const { step } = useLocalSearchParams() as any;
+
   return (
     <ThemedSafeAreaView>
       <View style={styles.header}>
@@ -15,7 +16,7 @@ export default function Register() {
         </ThemedText>
       </View>
       <View style={styles.body}>
-        <RegistrationForm />
+        {determineRegistrationStep(Number.parseInt(step))}
       </View>
     </ThemedSafeAreaView>
   )

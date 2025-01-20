@@ -23,6 +23,7 @@ export default function AuthenticationInput({placeholder, value, setValue, style
             onChangeText={setValue}
             style={[style, focused && (isDark ? styles.focusedDark : styles.focusedLight)]}
             textContentType={textContentType}
+            keyboardType={keyboardType}
             onFocus={focus}
             onBlur={blur}
             placeholder={placeholder}

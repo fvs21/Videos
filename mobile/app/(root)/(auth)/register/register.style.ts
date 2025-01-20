@@ -5,7 +5,7 @@ export const styles = StyleSheet.create({
         height: "100%",
     },
     header: {
-        height: "20%",
+        height: "15%",
         paddingHorizontal: 20,
         display: "flex",
         justifyContent: "center"
@@ -14,7 +14,7 @@ export const styles = StyleSheet.create({
         fontSize: 30
     },
     body: {
-        height: "60%",
+        height: "85%",
         paddingHorizontal: 20
     },
 })

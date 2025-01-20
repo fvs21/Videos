@@ -5,7 +5,7 @@ import { StyleSheet, TextInput, TextInputProps, useColorScheme } from 'react-nat
 export type ThemedTextInputProps = TextInputProps & {
     value: string;
     setValue: (value: string) => void;
-    placeholder: string;
+    placeholder?: string;
     keyboardType?: TextInput['props']['keyboardType'];
     textContentType?: TextInput['props']['textContentType'];
     [x: string]: any;

@@ -5,6 +5,7 @@ import ThemedTextInput from '@/components/ThemedTextInput';
 import { useState } from 'react';
 import { Link, router } from 'expo-router';
 import { ThemedText } from '@/components/ThemedText';
+import AuthenticationInput from '@/components/AuthenticationInput';
 
 export default function Index() {
   const theme = useColorScheme() ?? 'light';
@@ -24,14 +25,14 @@ export default function Index() {
         </ThemedText>
       </View>
       <View style={styles.body}>
-        <ThemedTextInput 
+        <AuthenticationInput 
           style={styles.inputs}
           value={credential} 
           setValue={setCredential} 
           placeholder='Username, email or phone number' 
           keyboardType='default' 
         />
-        <ThemedTextInput 
+        <AuthenticationInput 
           style={styles.inputs}
           value={password} 
           setValue={setPassword} 
@@ -47,7 +48,7 @@ export default function Index() {
         </Link>
       </View>
       <View style={styles.footer}>
-        <TouchableOpacity style={styles.registerButton} onPress={() => router.push('/register')}>
+        <TouchableOpacity style={styles.registerButton} onPress={() => router.push('/register/0')}>
           <Text style={styles.registerButtonText}>Create account</Text>
         </TouchableOpacity>
       </View>
