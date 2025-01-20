@@ -17,6 +17,7 @@ export const Colors = {
         icon: "#687076",
         tabIconDefault: "#687076",
         tabIconSelected: "#0a7ea4",
+        inputColor: "#f5f5f5"
     },
 
     dark: {
@@ -29,5 +30,6 @@ export const Colors = {
         white100: "#ECEDEE",
         white200: "#F7F8FA",
         white300: "#F7F8FA",
+        inputColor: "#1f2024"
     }
 }
