@@ -4,6 +4,7 @@ import icon from "@/assets/images/icon.png";
 import ThemedTextInput from '@/components/ThemedTextInput';
 import { useState } from 'react';
 import { Link, router } from 'expo-router';
+import { ThemedText } from '@/components/ThemedText';
 
 export default function Index() {
   const theme = useColorScheme() ?? 'light';
@@ -16,7 +17,7 @@ export default function Index() {
   return (
     <SafeAreaView style={[styles.indexContainer, isDark ? styles.darkMain : styles.lightMain]}>
       <View style={styles.heading}>
-        <Image source={icon} style={{ width: 140, height: 140 }} />
+        <Image source={icon} style={{ width: 120, height: 120 }} />
       </View>
       <View style={styles.body}>
         <ThemedTextInput 
@@ -38,7 +39,7 @@ export default function Index() {
           <Text style={styles.loginButtonText}>Log in</Text>
         </TouchableOpacity>
         <Link href={'/forgot-password'} style={styles.forgotButton}>
-          Forgot password?
+          <ThemedText weight='300'>Forgot password?</ThemedText>
         </Link>
       </View>
       <View style={styles.footer}>

@@ -1,7 +1,7 @@
 export const Colors = {
-    primary300: "#3BCBB7",
+    primary300: "#239e8d",
     primary200: "rgba(59, 203, 183, 0.6)",
-    primary100: "rgba(59, 203, 183, 0.25)",
+    primary100: "rgba(203, 59, 105, 0.25)",
     secondary300: "#rgba(50, 109, 101, 1)",
     secondary200: "rgba(50, 109, 101, 0.6)",
     secondary100: "rgba(50, 109, 101, 0.25)",

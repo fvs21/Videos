@@ -18,15 +18,15 @@ export const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     body: {
-        paddingHorizontal: 25,
+        paddingHorizontal: 20,
         height: "50%",
     },
 
     inputs: {
-        paddingVertical: 22,
+        paddingVertical: 20,
         paddingHorizontal: 18,
         borderRadius: 14,
-        fontSize: 16,
+        fontSize: 15,
         marginBottom: 20
     },
 
@@ -58,13 +58,15 @@ export const styles = StyleSheet.create({
     registerButton: {
         width: '100%',
         padding: 20,
-        backgroundColor: Colors.primary300,
-        borderRadius: 20,
+        backgroundColor: 'transparent',
+        borderRadius: 30,
+        borderWidth: 1,
+        borderColor: Colors.primary300,
     },
     registerButtonText: {
         textAlign: 'center',
-        color: 'white',
+        color: Colors.primary300,
         fontSize: 16,
-        fontFamily: 'Rubik-Regular'
+        fontFamily: 'Rubik-Regular',
     }
 })

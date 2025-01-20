@@ -8,14 +8,15 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 
 export function useThemeColor(
   props: { light?: string; dark?: string },
-  textNumber: keyof typeof Colors.light & keyof typeof Colors.dark
+  textNumber: string
 ) {
   const theme = useColorScheme() ?? 'light';
   const colorFromProps = props[theme];
+  const color = theme == 'light' ? 'black' : 'white';
 
   if (colorFromProps) {
     return colorFromProps;
   } else {
-    return Colors[theme][textNumber];
+    return Colors[theme][color + textNumber as keyof typeof Colors[typeof theme]];
   }
 }
