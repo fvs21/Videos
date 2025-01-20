@@ -22,7 +22,8 @@ export default function Layout() {
     return null;
   }
   return <Stack 
-    screenOptions={{
-    headerShown: false,
-  }} />;
+      screenOptions={{
+        headerShown: false,
+      }}
+    />;
 }

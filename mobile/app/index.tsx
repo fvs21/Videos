@@ -25,14 +25,14 @@ export default function Index() {
       </View>
       <View style={styles.body}>
         <ThemedTextInput 
-          className={styles.inputs}
+          style={styles.inputs}
           value={credential} 
           setValue={setCredential} 
           placeholder='Username, email or phone number' 
           keyboardType='default' 
         />
         <ThemedTextInput 
-          className={styles.inputs}
+          style={styles.inputs}
           value={password} 
           setValue={setPassword} 
           placeholder='Password' 
