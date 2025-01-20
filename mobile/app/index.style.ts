@@ -1,7 +1,11 @@
+import { Colors } from "@/styles/variables";
 import { StyleSheet } from "react-native";
-import { Colors } from "./variables";
 
 export const styles = StyleSheet.create({
+    indexContainer: {
+        height: '100%',
+        padding: 20,
+    },
     darkMain: {
         backgroundColor: Colors.dark.background,
     },

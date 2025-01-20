@@ -20,7 +20,7 @@ export const Colors = {
     },
 
     dark: {
-        background: "rbg(31, 32, 36)",
+        background: "#101012",
         tint: "#fff",
         icon: "#9BA1A6",
         tabIconDefault: "#9BA1A6",
