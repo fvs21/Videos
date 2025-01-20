@@ -34,10 +34,14 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.light.inputColor,
         color: 'black',
         fontFamily: 'Rubik-Regular',
+        borderWidth: 1,
+        borderColor: Colors.light.border,
     },
     themedInputDark: {
         backgroundColor: Colors.dark.inputColor,
         color: 'white',
         fontFamily: 'Rubik-Regular',
+        borderWidth: 1,
+        borderColor: Colors.dark.border
     }
 })

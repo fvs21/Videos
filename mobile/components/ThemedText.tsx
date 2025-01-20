@@ -40,24 +40,28 @@ const styles = StyleSheet.create({
   default: {
     fontSize: 16,
     lineHeight: 24,
+    fontFamily: 'Rubik-Regular',
   },
   defaultSemiBold: {
     fontSize: 16,
     lineHeight: 24,
     fontWeight: '600',
+    fontFamily: 'Rubik-SemiBold',
   },
   title: {
-    fontSize: 32,
-    fontWeight: 'bold',
+    fontSize: 34,
     lineHeight: 32,
+    fontFamily: 'Rubik-Bold',
   },
   subtitle: {
     fontSize: 20,
     fontWeight: 'bold',
+    fontFamily: 'Rubik-Light',
   },
   link: {
     lineHeight: 30,
     fontSize: 16,
     color: '#0a7ea4',
+    fontFamily: 'Rubik-Regular',
   },
 });

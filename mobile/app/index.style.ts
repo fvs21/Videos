@@ -13,9 +13,15 @@ export const styles = StyleSheet.create({
         backgroundColor: Colors.light.background
     },
     heading: {
-        height: "35%",
+        height: "20%",
         display: 'flex',
-        justifyContent: 'center',
+    },
+    welcome: {
+        height: "15%",
+    },
+    welcomeMessage: {
+        paddingHorizontal: 20,
+        height: "100%",
     },
     body: {
         paddingHorizontal: 20,
@@ -57,7 +63,7 @@ export const styles = StyleSheet.create({
     },
     registerButton: {
         width: '100%',
-        padding: 20,
+        padding: 10,
         backgroundColor: 'transparent',
         borderRadius: 30,
         borderWidth: 1,

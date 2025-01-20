@@ -1,10 +1,10 @@
 import React from 'react'
-import { Text, View } from 'react-native'
+import { SafeAreaView, Text, View } from 'react-native'
 
 export default function Register() {
   return (
-    <View>
+    <SafeAreaView>
       <Text>Register</Text>
-    </View>
+    </SafeAreaView>
   )
 }

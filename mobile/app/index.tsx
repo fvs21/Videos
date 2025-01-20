@@ -13,11 +13,15 @@ export default function Index() {
   const [credential, setCredential] = useState('');
   const [password, setPassword] = useState('');
 
-
   return (
     <SafeAreaView style={[styles.indexContainer, isDark ? styles.darkMain : styles.lightMain]}>
       <View style={styles.heading}>
-        <Image source={icon} style={{ width: 120, height: 120 }} />
+        <Image source={icon} style={{ width: 100, height: 100 }} />
+      </View>
+      <View style={styles.welcome}>
+        <ThemedText type='title' weight='300' style={styles.welcomeMessage}>
+          Join to buy or sell anything
+        </ThemedText>
       </View>
       <View style={styles.body}>
         <ThemedTextInput 
@@ -39,7 +43,7 @@ export default function Index() {
           <Text style={styles.loginButtonText}>Log in</Text>
         </TouchableOpacity>
         <Link href={'/forgot-password'} style={styles.forgotButton}>
-          <ThemedText weight='300'>Forgot password?</ThemedText>
+          <ThemedText weight='300' type='defaultSemiBold'>Forgot password?</ThemedText>
         </Link>
       </View>
       <View style={styles.footer}>
