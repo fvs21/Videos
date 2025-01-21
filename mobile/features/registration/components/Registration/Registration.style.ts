@@ -27,5 +27,20 @@ export const styles = StyleSheet.create({
         textAlign: "center",
         fontSize: 18,
         fontFamily: "Rubik-Medium"
-    }
+    },
+    header: {
+        height: "12%",
+        paddingHorizontal: 20,
+        display: "flex",
+        justifyContent: "center",
+    },
+    title: {
+        fontSize: 30
+    },
+    registrationBody: {
+        height: "85%",
+        paddingHorizontal: 20,
+        display: "flex",
+        justifyContent: "space-between"
+    },
 })  
