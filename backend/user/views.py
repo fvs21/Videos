@@ -11,3 +11,7 @@ class UserViewSet(viewsets.ViewSet):
     @action(detail=False, methods=['patch'])
     def update_pfp(self, request: HttpRequest) -> JsonResponse:
         return service.update_pfp(request)
+    
+    @action(detail=False, methods=['patch'])
+    def update_username(self, request: HttpRequest) -> JsonResponse:
+        return service.update_username(request)

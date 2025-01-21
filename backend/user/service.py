@@ -1,9 +1,10 @@
 from django.http import HttpRequest, JsonResponse
-from user.exceptions import FieldAlreadyInUse
+from user.exceptions import FieldAlreadyInUse, UnableToUpdateUser
 from user.models import User
 from authentication.service import get_user_by_id
 from image.service import upload_image
 from user.serializers import UserSerializer
+from user.validators import UserValidator
 
 def update_pfp(request: HttpRequest) -> JsonResponse:
     user: User = get_user_by_id(request.user.id)
@@ -21,7 +22,9 @@ def update_username(request: HttpRequest) -> JsonResponse:
     username = request.POST.get('username')
     if User.objects.exists(username = username):
         raise FieldAlreadyInUse("username")
-    
+    if not UserValidator.validate_username(username):
+        raise UnableToUpdateUser("username")
+
     user.username = username
     user.save()
 

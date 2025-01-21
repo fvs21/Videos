@@ -44,7 +44,7 @@ def generate_authentication_response(user: User) -> JsonResponse:
 
     return response
 
-def register_user(request: HttpRequest) -> JsonResponse:
+def register_user(request: HttpRequest) -> User:
     json = JSONParser().parse(request)
     data = RegistrationSerializer(data=json)
 
@@ -59,10 +59,10 @@ def register_user(request: HttpRequest) -> JsonResponse:
 
     logging.info(f"Verification code for {user.email}: {verification_code}")
 
-    return generate_authentication_response(user)
+    return user
 
 
-def login_user(request: HttpRequest) -> JsonResponse:
+def login_user(request: HttpRequest) -> User:
     json = JSONParser().parse(request)
     username = json.get("username")
     password = json.get("password")
@@ -72,9 +72,7 @@ def login_user(request: HttpRequest) -> JsonResponse:
     if user is None:
         raise AuthenticationException("Invalid credentials", 400)
     
-    response = generate_authentication_response(user)
-    response.status_code = 200
-    return response
+    return user
 
 def get_session(request: HttpRequest) -> JsonResponse:
     user: User = get_user_by_id(request.user.id)

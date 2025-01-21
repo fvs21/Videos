@@ -1,6 +1,8 @@
 from rest_framework.decorators import api_view
 from django.http import HttpRequest
 from django.http import JsonResponse
+
+from user.models import User
 from . import service
 from rest_framework import viewsets
 from rest_framework.decorators import action
@@ -12,11 +14,15 @@ class AuthenticationViewSet(viewsets.ViewSet):
 
     @action(methods=["POST"], detail=False)
     def login(self, request: HttpRequest) -> JsonResponse:
-        return service.login_user(request)
+        user = service.login_user(request)
+        response = service.generate_authentication_response(user)
+        response.status_code = 200
+        return response
 
     @action(methods=["POST"], detail=False)
     def register(self, request: HttpRequest) -> JsonResponse:
-        return service.register_user(request)
+        user: User = service.register_user(request)
+        return service.generate_authentication_response(user)
     
     @action(methods=["POST"], detail=False)
     def forgot_password(self, request: HttpRequest) -> JsonResponse:
@@ -41,6 +47,10 @@ class AuthenticatedAuthViewSet(viewsets.ViewSet):
     @action(methods=["POST"], detail=False)
     def verify_email(self, request: HttpRequest) -> JsonResponse:
         return service.check_email_verification(request)
+    
+    @action(methods=['POST'], detail=False)
+    def request_email_verification_code(self, request: HttpRequest) -> JsonResponse:
+        return service.resend_email_verification_code(request)
 
     
 @api_view(["GET"])
