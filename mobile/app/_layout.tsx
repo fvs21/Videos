@@ -1,6 +1,8 @@
 import { SplashScreen, Stack } from 'expo-router';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useFonts } from "expo-font";
+import { Provider } from "jotai";
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 export default function Layout() {
   const [fontsLoaded] = useFonts({
@@ -18,12 +20,21 @@ export default function Layout() {
     }
   }, [fontsLoaded]);
 
+  const [queryClient, setQueryClient] = useState(() => new QueryClient());
+
   if(!fontsLoaded) {
     return null;
   }
-  return <Stack 
-      screenOptions={{
-        headerShown: false,
-      }}
-    />;
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <Provider>
+        <Stack 
+          screenOptions={{
+            headerShown: false,
+          }}
+        />
+      </Provider>
+    </QueryClientProvider>
+  )
 }

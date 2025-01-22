@@ -8,6 +8,9 @@ export const styles = StyleSheet.create({
         borderRadius: 12,
         fontSize: 16
     },
+    passwordInput: {
+        fontSize: 16,
+    },
     label: {
         paddingBottom: 8
     },
@@ -43,4 +46,8 @@ export const styles = StyleSheet.create({
         display: "flex",
         justifyContent: "space-between"
     },
+    dateInputDisplay: {
+        borderWidth: 1,
+        borderColor: Colors.primary300,
+    }
 })  

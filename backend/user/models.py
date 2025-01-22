@@ -49,7 +49,7 @@ class User(AbstractBaseUser):
     password_updated_at = models.DateTimeField(null=True, blank=True)
 
     USERNAME_FIELD = "username"
-    REQUIRED_FIELDS = ["email", "full_name", "date_of_birth", "password"]
+    REQUIRED_FIELDS = ["email", "date_of_birth", "password"]
 
     objects = UserManager()
 

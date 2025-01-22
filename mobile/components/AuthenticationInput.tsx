@@ -20,7 +20,6 @@ export default function AuthenticationInput({placeholder, value, setValue, style
         <ThemedTextInput
             value={value}
             setValue={setValue}
-            onChangeText={setValue}
             style={[style, focused && (isDark ? styles.focusedDark : styles.focusedLight)]}
             textContentType={textContentType}
             keyboardType={keyboardType}

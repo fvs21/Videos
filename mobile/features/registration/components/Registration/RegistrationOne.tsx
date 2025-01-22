@@ -1,17 +1,36 @@
-import { ThemedText } from '@/components/ThemedText'
-import { Text, TouchableOpacity, View } from 'react-native'
-import { styles } from './Registration.style'
-import { useState } from 'react'
-import AuthenticationInput from '@/components/AuthenticationInput'
-import { RegistrationProps } from '../../types'
-import { router, useNavigation } from 'expo-router'
-import GoBackButton from '@/components/GoBackButton'
-import PrimaryDisabledButton from '@/components/PrimaryDisabledButton'
+import { View } from "react-native";
+import { styles } from "./Registration.style";
+import { ThemedText } from "@/components/ThemedText";
+import { router } from "expo-router";
+import AuthenticationInput from "@/components/AuthenticationInput";
+import { useState } from "react";
+import GoBackButton from "@/components/GoBackButton";
+import DateTimePicker, { DateTimePickerEvent } from "@react-native-community/datetimepicker";
+import { validateAge } from "../../utils";
+import PrimaryDisabledButton from "@/components/PrimaryDisabledButton";
+import { useDateOfBirthAtom } from "../../store";
 
 export default function RegistrationOne() {
-    const [name, setName] = useState<string>("");
+    const [dateOfBirth, setDateOfBirth] = useDateOfBirthAtom();
+    const [displayedDate, setDisplayedDate] = useState(dateOfBirth.toDateString());
+    const [validAge, setValidAge] = useState(validateAge(dateOfBirth.toDateString()));
 
-    const disabled = name.length == 0;
+    function changeDate(event: DateTimePickerEvent, selectedDate: Date | undefined) {
+        if(selectedDate === undefined) return;
+
+        setDisplayedDate(selectedDate.toDateString());
+        setDateOfBirth(selectedDate);
+        setValidAge(validateAge(selectedDate.toDateString()));
+    }
+
+    function nextStep() {
+        if(!validAge) {
+            console.log("Not valid");
+            return;
+        }   
+
+        router.push("/register/1");
+    }
 
     return (
         <View style={styles.registrationStep}>
@@ -20,7 +39,7 @@ export default function RegistrationOne() {
                     <GoBackButton />
                 </View>
                 <ThemedText style={styles.title} weight='300' type='title'>
-                    What's your name?
+                    When's your birthdate?
                 </ThemedText>
             </View>
             <View style={styles.registrationBody}>
@@ -29,19 +48,26 @@ export default function RegistrationOne() {
                         weight='300' 
                         type='defaultSemiBold' 
                         style={styles.label}>
-                            Enter your legal name
+                            Select your birthdate
                     </ThemedText>
-                    <AuthenticationInput 
-                        value={name} 
-                        setValue={setName} 
-                        style={styles.registrationInput} 
-                        placeholder='Full name'
+                    <AuthenticationInput
+                        value={displayedDate}
+                        setValue={() => {}}
+                        style={styles.registrationInput}
+                        editable={false}
+                    />
+                    <DateTimePicker
+                        testID="dateTimePicker"
+                        value={dateOfBirth || new Date()}
+                        onChange={changeDate}
+                        mode="date"
+                        display="spinner"
                     />
                 </View>
-                <PrimaryDisabledButton 
-                    text='Next' 
-                    click={() => router.push("/register/1")}
-                    disabled={disabled}    
+                <PrimaryDisabledButton  
+                    text="Next"
+                    click={nextStep}
+                    disabled={!validAge}
                 />
             </View>
         </View>
