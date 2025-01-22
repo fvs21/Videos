@@ -1,16 +1,30 @@
 import { ThemedText } from '@/components/ThemedText'
-import { View } from 'react-native'
+import { Platform, View } from 'react-native'
 import { styles } from './Registration.style'
 import AuthenticationInput from '@/components/AuthenticationInput'
 import { router } from 'expo-router'
 import GoBackButton from '@/components/GoBackButton'
 import PrimaryDisabledButton from '@/components/PrimaryDisabledButton'
-import { useFullNameAtom } from '../../store'
+import { useEmailAtom } from '../../store'
+import { useState } from 'react'
+import { usePreventRemove } from '@react-navigation/native'
 
 export default function RegistrationFive() {
-    const [name, setName] = useFullNameAtom();
+    const [email] = useEmailAtom();
+    const [verificationCode, setVerificationCode] = useState('');
+    const disabled = verificationCode.length !== 6;
 
-    const disabled = name.length == 0;
+    async function handleSubmit() {
+        if (disabled) return;
+        
+        try {
+            // Add your verification logic here
+            // await verifyEmail(email, verificationCode);
+            router.push("/register/success");
+        } catch(error) {
+            console.log(error);
+        }
+    }
 
     return (
         <View style={styles.registrationStep}>
@@ -19,30 +33,34 @@ export default function RegistrationFive() {
                     <GoBackButton />
                 </View>
                 <ThemedText style={styles.title} weight='300' type='title'>
-                    What's your name?
+                    Verify your email
                 </ThemedText>
             </View>
             <View style={styles.registrationBody}>
                 <View>
                     <ThemedText 
                         weight='300' 
-                        type='defaultSemiBold' 
-                        style={styles.label}>
-                            Enter your legal name
+                        type='default' 
+                        style={[styles.label, {marginBottom: 10}]}>
+                            Enter the 6-digit code sent to {email}
                     </ThemedText>
                     <AuthenticationInput 
-                        value={name} 
-                        setValue={setName} 
-                        style={styles.registrationInput} 
-                        placeholder='Full name'
-                        textContentType='name'
+                        value={verificationCode} 
+                        setValue={setVerificationCode}
+                        onChangeText={setVerificationCode}
+                        style={[styles.registrationInput, {marginBottom: 30}]} 
+                        placeholder='Verification code'
+                        keyboardType='number-pad'
+                        textContentType='oneTimeCode'
+                        maxLength={6}
+                        autoCapitalize='none'
+                    />
+                    <PrimaryDisabledButton 
+                        text='Next' 
+                        click={handleSubmit}
+                        disabled={disabled}    
                     />
                 </View>
-                <PrimaryDisabledButton 
-                    text='Next' 
-                    click={() => router.push("/register/1")}
-                    disabled={disabled}    
-                />
             </View>
         </View>
     )

@@ -48,7 +48,12 @@
           ]
         }
       ],
-      "expo-secure-store"
+      [
+        "expo-secure-store", {
+          "configureAndroidBackup": true,
+          "faceIdPermission": "Allow $(PRODUCT_NAME) to use Face ID"
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true

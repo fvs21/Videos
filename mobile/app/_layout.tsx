@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useFonts } from "expo-font";
 import { Provider } from "jotai";
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import AuthenticationProvider from '@/providers/AuthenticationProvider';
 
 export default function Layout() {
   const [fontsLoaded] = useFonts({
@@ -29,11 +30,13 @@ export default function Layout() {
   return (
     <QueryClientProvider client={queryClient}>
       <Provider>
-        <Stack 
-          screenOptions={{
-            headerShown: false,
-          }}
-        />
+        <AuthenticationProvider>
+          <Stack 
+            screenOptions={{
+              headerShown: false,
+            }}
+          />
+        </AuthenticationProvider>
       </Provider>
     </QueryClientProvider>
   )

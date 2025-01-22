@@ -28,7 +28,8 @@ def generate_authentication_response(user: User) -> JsonResponse:
     response = JsonResponse(
         {
             "user": UserSerializer(user).data,
-            "access_token": tokens["access_token"]
+            "access_token": tokens["access_token"],
+            "refresh_token": tokens["refresh_token"]
         }, 
         status=201
     )
@@ -188,3 +189,9 @@ def reset_password(request: HttpRequest) -> JsonResponse:
     user.reset_password(data.new_password)
 
     return JsonResponse({"message": "Password reset successful"}, status=200)
+
+def check_username_availability(request: HttpRequest) -> bool:
+    username = request.GET.get("username")
+    user = User.objects.filter(username=username).first()
+
+    return user is None

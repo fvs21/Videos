@@ -1,43 +1,25 @@
 import { ThemedText } from '@/components/ThemedText'
 import { View } from 'react-native'
 import { styles } from './Registration.style'
-import AuthenticationInput from '@/components/AuthenticationInput'
+import { useState } from 'react'
 import { router } from 'expo-router'
 import GoBackButton from '@/components/GoBackButton'
 import PrimaryDisabledButton from '@/components/PrimaryDisabledButton'
-import { useDateOfBirthAtom, useEmailAtom, useFullNameAtom, usePasswordAtom } from '../../store'
-import { formatDateOfBirth, validateEmail, validatePassword } from '../../utils'
-import { useRegister } from '../../api'
-import { RegistrationData } from '../../types'
-import PasswordInput from '@/components/PasswordInput'
+import { useEmailAtom } from '../../store'
+import { validateEmail } from '../../utils'
+import ValidatedInput from '@/components/ValidatedInput'
 
 export default function RegistrationThree() {
-    const [password, setPassword] = usePasswordAtom();
-    const disabled = !validatePassword(password);
+    const [email, setEmail] = useEmailAtom();
+    const [error, setError] = useState<string>("");
+    const isEmailValid = validateEmail(email);
 
-    const { register, isPending, registerDisabled } = useRegister();
-    const [full_name] = useFullNameAtom();
-    const [date_of_birth] = useDateOfBirthAtom();
-    const [email] = useEmailAtom();
-
-    async function handleSubmit() {
-        if (disabled) return;
-
-        const body: RegistrationData = {
-            email,
-            date_of_birth: formatDateOfBirth(date_of_birth),
-            password
-        }
-
-        console.log(body);
-        router.push("/register/3");
-        return;
-        
-        try {
-            await register(body);
-            router.push("/register/3");
-        } catch(error) {
-            console.log(error);
+    function handleEmailChange(value: string) {
+        setEmail(value);
+        if (!validateEmail(value)) {
+            setError("Please enter a valid email address");
+        } else {
+            setError("");
         }
     }
 
@@ -48,30 +30,33 @@ export default function RegistrationThree() {
                     <GoBackButton />
                 </View>
                 <ThemedText style={styles.title} weight='300' type='title'>
-                    Create a password
+                    Enter your email
                 </ThemedText>
             </View>
             <View style={styles.registrationBody}>
                 <View>
                     <ThemedText 
                         weight='300' 
-                        type='default' 
-                        style={[styles.label, {marginBottom: 10}]}>
-                            The created password must contain at least 8 characters
+                        type='defaultSemiBold' 
+                        style={styles.label}>
+                            Enter a valid email address
                     </ThemedText>
-                    <PasswordInput 
-                        value={password} 
-                        setValue={setPassword} 
+                    <ValidatedInput 
+                        value={email} 
+                        setValue={handleEmailChange}
                         style={styles.registrationInput} 
-                        placeholder='Password'
-                        textContentType='newPassword'
+                        placeholder='Email address'
+                        textContentType='emailAddress'
+                        keyboardType='email-address'
                         autoCapitalize='none'
+                        valid={isEmailValid || email.length === 0}
+                        error={error}
                     />
                 </View>
                 <PrimaryDisabledButton 
                     text='Next' 
-                    click={handleSubmit}
-                    disabled={disabled}    
+                    click={() => router.push("/register/3")}
+                    disabled={!isEmailValid}    
                 />
             </View>
         </View>

@@ -56,3 +56,12 @@ class AuthenticatedAuthViewSet(viewsets.ViewSet):
 @api_view(["GET"])
 def refresh(request: HttpRequest) -> JsonResponse:
     return service.refresh_token(request)
+
+@api_view(["GET"])
+def username_available(request: HttpRequest) -> JsonResponse:
+    available: bool = service.check_username_availability(request)
+
+    if available:
+        return JsonResponse({"available": True}, status=200)
+    
+    return JsonResponse({"available": False}, status=400)

@@ -1,30 +1,37 @@
 import { ThemedText } from '@/components/ThemedText'
-import { Platform, View } from 'react-native'
+import { View } from 'react-native'
 import { styles } from './Registration.style'
-import AuthenticationInput from '@/components/AuthenticationInput'
 import { router } from 'expo-router'
 import GoBackButton from '@/components/GoBackButton'
 import PrimaryDisabledButton from '@/components/PrimaryDisabledButton'
-import { useEmailAtom } from '../../store'
-import { useState } from 'react'
-import { usePreventRemove } from '@react-navigation/native'
+import { useDateOfBirthAtom, useEmailAtom, usePasswordAtom, useUsernameAtom } from '../../store'
+import { formatDateOfBirth, validateEmail, validatePassword } from '../../utils'
+import { useRegister } from '../../api'
+import { RegistrationData } from '../../types'
+import PasswordInput from '@/components/PasswordInput'
 
 export default function RegistrationFour() {
-    const [email] = useEmailAtom();
-    const [verificationCode, setVerificationCode] = useState('');
-    const disabled = verificationCode.length !== 6;
+    const [password, setPassword] = usePasswordAtom();
+    const disabled = !validatePassword(password);
 
-    usePreventRemove(true, ({ data }) => {
-        
-    })
+    const { register, isPending, registerDisabled } = useRegister();
+    const [username] = useUsernameAtom();
+    const [date_of_birth] = useDateOfBirthAtom();
+    const [email] = useEmailAtom();
 
     async function handleSubmit() {
         if (disabled) return;
+
+        const body: RegistrationData = {
+            username,
+            email,
+            date_of_birth: formatDateOfBirth(date_of_birth),
+            password
+        }
         
         try {
-            // Add your verification logic here
-            // await verifyEmail(email, verificationCode);
-            router.push("/register/success");
+            const request = await register(body);
+            router.push("/register/4");
         } catch(error) {
             console.log(error);
         }
@@ -37,7 +44,7 @@ export default function RegistrationFour() {
                     <GoBackButton />
                 </View>
                 <ThemedText style={styles.title} weight='300' type='title'>
-                    Verify your email
+                    Create a password
                 </ThemedText>
             </View>
             <View style={styles.registrationBody}>
@@ -46,25 +53,22 @@ export default function RegistrationFour() {
                         weight='300' 
                         type='default' 
                         style={[styles.label, {marginBottom: 10}]}>
-                            Enter the 6-digit code sent to {email}
+                            The created password must contain at least 8 characters
                     </ThemedText>
-                    <AuthenticationInput 
-                        value={verificationCode} 
-                        setValue={setVerificationCode}
-                        onChangeText={setVerificationCode}
-                        style={[styles.registrationInput, {marginBottom: 30}]} 
-                        placeholder='Verification code'
-                        keyboardType='number-pad'
-                        textContentType='oneTimeCode'
-                        maxLength={6}
+                    <PasswordInput 
+                        value={password} 
+                        setValue={setPassword} 
+                        style={styles.registrationInput} 
+                        placeholder='Password'
+                        textContentType='newPassword'
                         autoCapitalize='none'
                     />
-                    <PrimaryDisabledButton 
-                        text='Next' 
-                        click={handleSubmit}
-                        disabled={disabled}    
-                    />
                 </View>
+                <PrimaryDisabledButton 
+                    text='Next' 
+                    click={handleSubmit}
+                    disabled={disabled}    
+                />
             </View>
         </View>
     )
