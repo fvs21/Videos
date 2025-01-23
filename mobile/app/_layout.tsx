@@ -4,6 +4,7 @@ import { useFonts } from "expo-font";
 import { Provider } from "jotai";
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import AuthenticationProvider from '@/providers/AuthenticationProvider';
+import RouteProviders from '@/providers/RouteProviders';
 
 export default function Layout() {
   const [fontsLoaded] = useFonts({
@@ -31,11 +32,7 @@ export default function Layout() {
     <QueryClientProvider client={queryClient}>
       <Provider>
         <AuthenticationProvider>
-          <Stack 
-            screenOptions={{
-              headerShown: false,
-            }}
-          />
+          <RouteProviders />
         </AuthenticationProvider>
       </Provider>
     </QueryClientProvider>

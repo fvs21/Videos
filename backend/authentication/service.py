@@ -85,17 +85,44 @@ def get_user_by_id(id: int) -> User:
     except User.DoesNotExist:
         raise UserDoesNotExistException(status_code=404)
     
+def process_refresh_token(refresh_token: str) -> RefreshToken:
+    if not refresh_token:
+        raise RefreshTokenException("No refresh token provided", 401)
+        
+    try:
+        token = RefreshToken(refresh_token)
+        if token.check_blacklist():
+            raise RefreshTokenException("Token blacklisted", 409)
+        return token
+    except Exception:
+        raise RefreshTokenException("Invalid refresh token", 401)
+
 def refresh_token(request: HttpRequest) -> JsonResponse:
     refresh_token = request.COOKIES.get("user_r")
+    token = process_refresh_token(refresh_token)
+    return JsonResponse({"access_token": str(token.access_token)}, status=200)
 
-    if RefreshToken(refresh_token).check_blacklist():
-        raise RefreshTokenException("Token blacklisted", 409)
+def mobile_refresh_token(request: HttpRequest) -> JsonResponse:
+    auth = request.headers.get("Authorization", '')
 
-    newToken = RefreshToken(refresh_token)
-    return JsonResponse({"access_token": str(newToken.access_token)}, status=200)
+    if auth is None:
+        raise RefreshTokenException("No authorization header provided", 401)
+
+    refresh_token = auth.replace('Bearer ', '')
+
+    token = process_refresh_token(refresh_token)
+    return JsonResponse({"access_token": str(token.access_token)}, status=200)
 
 def logout_user(request: HttpRequest) -> JsonResponse:
     refresh_token = request.COOKIES.get("user_r")
+
+    newToken = RefreshToken(refresh_token)
+    newToken.blacklist()
+    return JsonResponse({"message", "Succesfully logged out"}, status=200)
+
+def mobile_logout_user(request: HttpRequest) -> JsonResponse:
+    auth = request.headers.get("Authorization", '')
+    refresh_token = auth.replace('Bearer ', '')
 
     newToken = RefreshToken(refresh_token)
     newToken.blacklist()

@@ -1,8 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useState } from 'react';
 import * as SecureStore from 'expo-secure-store';
+import { useAuth, useRefreshToken } from '@/api/hooks/auth';
+import { api } from '@/api';
+import { View } from 'react-native';
 
 export default function AuthenticationProvider({ children }: { children: React.ReactNode }) {
-    const [isLoading, setIsLoading] = useState(true);
+    const { refreshToken, isPending } = useRefreshToken();
 
     useEffect(() => {
         const checkAuthToken = async () => {
@@ -10,23 +13,59 @@ export default function AuthenticationProvider({ children }: { children: React.R
                 const token = await SecureStore.getItemAsync('user_r');
                 
                 if (token) {
-                    // TODO: Implement user information retrieval logic here
-                    // Example:
-                    // await fetchUserInfo(token);
+                    await refreshToken(token);
                 }
             } catch (error) {
                 console.error('Error checking authentication:', error);
-            } finally {
-                setIsLoading(false);
             }
         };
 
         checkAuthToken();
     }, []);
 
-    if (isLoading) {
-        // You might want to show a loading spinner here
-        return null;
+    const [token, setToken] = useAuth();
+
+    useLayoutEffect(() => {
+        const interceptor = api.interceptors.request.use(
+            (config) => {
+                config.headers.Authorization = !(config as any)._retry && token ? `Bearer ${token}` : undefined;
+                return config;
+            }
+        )
+
+        return () => {
+            api.interceptors.request.eject(interceptor);
+        }
+    }, [token]);
+
+    useLayoutEffect(() => {
+        const interceptor = api.interceptors.response.use(
+            (response) => response,
+            async (error) => {
+                const originalRequest = error.config;
+                if (error.response.status === 401 && error.response.data.message === 'Unauthorized') {
+                    try {
+                        const response = await refreshToken(token);
+                        setToken(response.access_token);
+
+                        originalRequest.headers.Authorization = `Bearer ${response.access_token}`;
+                        originalRequest['_retry'] = true;
+                        return api(originalRequest);
+                    } catch(error) {
+                        setToken(null);
+                    }
+                }
+                return Promise.reject(error);
+            }
+        )
+
+        return () => {
+            api.interceptors.response.eject(interceptor);
+        }
+    }, []);
+
+    if(isPending) {
+        return <View></View>;
     }
 
     return children;

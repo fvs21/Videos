@@ -24,7 +24,8 @@ export default function RegistrationTwo() {
         try {
             await checkUsernameAvailability(username);
             setIsUsernameValid(true);
-        } catch {
+        } catch(error) {
+            console.log(error);
             setError("Username already taken");
             setIsUsernameValid(false);
         }
@@ -42,7 +43,7 @@ export default function RegistrationTwo() {
     }
 
     useEffect(() => {
-        const timeout = setTimeout(() => checkUsername(), 1000);
+        const timeout = setTimeout(() => checkUsername(), 500);
         return () => clearTimeout(timeout);
     }, [username]);
 

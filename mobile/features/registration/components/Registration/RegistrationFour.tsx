@@ -30,7 +30,7 @@ export default function RegistrationFour() {
         }
         
         try {
-            const request = await register(body);
+            await register(body);
             router.push("/register/4");
         } catch(error) {
             console.log(error);

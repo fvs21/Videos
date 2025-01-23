@@ -1,4 +1,4 @@
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from django.http import HttpRequest
 from django.http import JsonResponse
 
@@ -6,7 +6,7 @@ from user.models import User
 from . import service
 from rest_framework import viewsets
 from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from backend.permissions import OnlyGuests
 
 class AuthenticationViewSet(viewsets.ViewSet):
@@ -45,6 +45,10 @@ class AuthenticatedAuthViewSet(viewsets.ViewSet):
         return service.logout_user(request)
     
     @action(methods=["POST"], detail=False)
+    def mobile_logout(self, request: HttpRequest) -> JsonResponse:
+        return service.mobile_logout_user(request)
+    
+    @action(methods=["POST"], detail=False)
     def verify_email(self, request: HttpRequest) -> JsonResponse:
         return service.check_email_verification(request)
     
@@ -56,6 +60,12 @@ class AuthenticatedAuthViewSet(viewsets.ViewSet):
 @api_view(["GET"])
 def refresh(request: HttpRequest) -> JsonResponse:
     return service.refresh_token(request)
+
+@api_view(["GET"])
+@permission_classes([AllowAny]) #change to isauthenticated for mobile
+@authentication_classes([])
+def mobile_refresh(request: HttpRequest) -> JsonResponse:
+    return service.mobile_refresh_token(request)
 
 @api_view(["GET"])
 def username_available(request: HttpRequest) -> JsonResponse:
