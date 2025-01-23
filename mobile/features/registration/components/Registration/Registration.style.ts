@@ -49,5 +49,14 @@ export const styles = StyleSheet.create({
     dateInputDisplay: {
         borderWidth: 1,
         borderColor: Colors.primary300,
+    },
+    verificationHeader: {
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center"
+    },
+    verificationHeaderText: {
+        fontSize: 18
     }
 })  

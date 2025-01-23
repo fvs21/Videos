@@ -1,7 +1,7 @@
 import { User } from "@/types/globals";
 import { useQueryClient } from "@tanstack/react-query";
 
-export const useUser = () => {
+export const useUser = (): [User, (user: User) => void] => {
     const queryClient = useQueryClient();
         
     function setUser(user: User) {

@@ -45,7 +45,15 @@ export default function AuthenticationProvider({ children }: { children: React.R
                 const originalRequest = error.config;
                 if (error.response.status === 401 && error.response.data.message === 'Unauthorized') {
                     try {
-                        const response = await refreshToken(token);
+                        const refresh_token = await SecureStore.getItemAsync('user_r');
+
+                        if(!refresh_token) {
+                            setToken(null);
+                            originalRequest['_retry'] = true;
+                            return Promise.reject(error);
+                        }
+
+                        const response = await refreshToken(refresh_token);
                         setToken(response.access_token);
 
                         originalRequest.headers.Authorization = `Bearer ${response.access_token}`;

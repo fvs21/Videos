@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { api, apiGuest } from "..";
+import { User } from "@/types/globals";
 
 export const useRefreshToken = () => {
     const queryClient = useQueryClient();
@@ -42,7 +43,7 @@ export const useAuth = (): [string, (access_token: string | null) => void] => {
 export const useFetchUser = () => {
     const { data, isLoading, isError } = useQuery({
         queryKey: ['user'],
-        queryFn: async () => {
+        queryFn: async (): Promise<User> => {
             const request = await api.get('/auth/session');
             return request.data;
         }

@@ -1,18 +1,17 @@
 import { ThemedText } from '@/components/ThemedText'
-import { Platform, View } from 'react-native'
+import { TouchableOpacity, View } from 'react-native'
 import { styles } from './Registration.style'
 import AuthenticationInput from '@/components/AuthenticationInput'
-import { router } from 'expo-router'
-import GoBackButton from '@/components/GoBackButton'
+import { router, useNavigation } from 'expo-router'
 import PrimaryDisabledButton from '@/components/PrimaryDisabledButton'
-import { useEmailAtom } from '../../store'
 import { useState } from 'react'
-import { usePreventRemove } from '@react-navigation/native'
+import { useUser } from '@/store'
 
 export default function RegistrationFive() {
-    const [email] = useEmailAtom();
+    const [user] = useUser();
     const [verificationCode, setVerificationCode] = useState('');
     const disabled = verificationCode.length !== 6;
+    const navigation = useNavigation<any>();
 
     async function handleSubmit() {
         if (disabled) return;
@@ -30,11 +29,17 @@ export default function RegistrationFive() {
         <View style={styles.registrationStep}>
             <View style={styles.header}>
                 <View style={{paddingBottom: 20}}>
-                    <GoBackButton />
                 </View>
-                <ThemedText style={styles.title} weight='300' type='title'>
-                    Verify your email
-                </ThemedText>
+                <View style={styles.verificationHeader}>
+                    <ThemedText style={styles.title} weight='300' type='title'>
+                        Verify your email
+                    </ThemedText>
+                    <TouchableOpacity onPress={() => navigation.navigate("more")}>
+                        <ThemedText weight='300' type='link' style={styles.verificationHeaderText}>
+                            More   
+                        </ThemedText>
+                    </TouchableOpacity>
+                </View>
             </View>
             <View style={styles.registrationBody}>
                 <View>
@@ -42,7 +47,7 @@ export default function RegistrationFive() {
                         weight='300' 
                         type='default' 
                         style={[styles.label, {marginBottom: 10}]}>
-                            Enter the 6-digit code sent to {email}
+                            Enter the 6-digit code sent to {user.email}
                     </ThemedText>
                     <AuthenticationInput 
                         value={verificationCode} 

@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { Link, router } from 'expo-router';
 import { ThemedText } from '@/components/ThemedText';
 import AuthenticationInput from '@/components/AuthenticationInput';
+import { useNavigation } from '@react-navigation/native';
 
 export default function Index() {
   const theme = useColorScheme() ?? 'light';
@@ -13,6 +14,8 @@ export default function Index() {
 
   const [credential, setCredential] = useState('');
   const [password, setPassword] = useState('');
+
+  const navigation = useNavigation<any>();
 
   return (
     <SafeAreaView style={[styles.indexContainer, isDark ? styles.darkMain : styles.lightMain]}>
@@ -48,7 +51,7 @@ export default function Index() {
         </Link>
       </View>
       <View style={styles.footer}>
-        <TouchableOpacity style={styles.registerButton} onPress={() => router.push('/register/0')}>
+        <TouchableOpacity style={styles.registerButton} onPress={() => navigation.navigate('Register', {step: '0'})}>
           <Text style={styles.registerButtonText}>Create account</Text>
         </TouchableOpacity>
       </View>
