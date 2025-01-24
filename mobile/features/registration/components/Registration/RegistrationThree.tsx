@@ -2,7 +2,7 @@ import { ThemedText } from '@/components/ThemedText'
 import { View } from 'react-native'
 import { styles } from './Registration.style'
 import { useState } from 'react'
-import { router } from 'expo-router'
+import { useNavigation } from 'expo-router'
 import GoBackButton from '@/components/GoBackButton'
 import PrimaryDisabledButton from '@/components/PrimaryDisabledButton'
 import { useEmailAtom } from '../../store'
@@ -10,6 +10,7 @@ import { validateEmail } from '../../utils'
 import ValidatedInput from '@/components/ValidatedInput'
 
 export default function RegistrationThree() {
+    const navigation = useNavigation<any>();
     const [email, setEmail] = useEmailAtom();
     const [error, setError] = useState<string>("");
     const isEmailValid = validateEmail(email);
@@ -55,7 +56,7 @@ export default function RegistrationThree() {
                 </View>
                 <PrimaryDisabledButton 
                     text='Next' 
-                    click={() => router.push("/register/3")}
+                    click={() => navigation.push('Register', {step: '3'})}
                     disabled={!isEmailValid}    
                 />
             </View>

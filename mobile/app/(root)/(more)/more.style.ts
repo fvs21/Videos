@@ -11,7 +11,7 @@ export const styles = StyleSheet.create({
     option: {
         display: "flex",
         flexDirection: "row",
-        gap: 20,
+        gap: 15,
         alignItems: "center"
     },
     optionIcon: {

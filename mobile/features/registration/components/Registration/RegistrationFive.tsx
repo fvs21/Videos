@@ -1,8 +1,8 @@
 import { ThemedText } from '@/components/ThemedText'
-import { TouchableOpacity, View } from 'react-native'
+import { Text, TouchableOpacity, View } from 'react-native'
 import { styles } from './Registration.style'
 import AuthenticationInput from '@/components/AuthenticationInput'
-import { router, useNavigation } from 'expo-router'
+import { useNavigation } from 'expo-router'
 import PrimaryDisabledButton from '@/components/PrimaryDisabledButton'
 import { useState } from 'react'
 import { useUser } from '@/store'
@@ -19,7 +19,7 @@ export default function RegistrationFive() {
         try {
             // Add your verification logic here
             // await verifyEmail(email, verificationCode);
-            router.push("/register/success");
+            //navigation.push('Register', {step: 'success'});
         } catch(error) {
             console.log(error);
         }
@@ -47,19 +47,22 @@ export default function RegistrationFive() {
                         weight='300' 
                         type='default' 
                         style={[styles.label, {marginBottom: 10}]}>
-                            Enter the 6-digit code sent to {user.email}
+                            Enter the 6-digit code sent to {"pornelius@gmail.com"}
                     </ThemedText>
                     <AuthenticationInput 
                         value={verificationCode} 
                         setValue={setVerificationCode}
                         onChangeText={setVerificationCode}
-                        style={[styles.registrationInput, {marginBottom: 30}]} 
+                        style={[styles.registrationInput]} 
                         placeholder='Verification code'
                         keyboardType='number-pad'
                         textContentType='oneTimeCode'
                         maxLength={6}
                         autoCapitalize='none'
                     />
+                    <TouchableOpacity style={styles.resendCodeBtn} onPress={() => {}}>
+                        <Text style={styles.resendCode}>Resend code</Text>
+                    </TouchableOpacity>
                     <PrimaryDisabledButton 
                         text='Next' 
                         click={handleSubmit}

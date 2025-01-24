@@ -1,25 +1,20 @@
 import { useFetchUser } from "@/api/hooks/auth";
 import { View } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import Explore from "@/app/(root)/(explore)/explore";
 import Index from "@/app/(root)";
 import VerifyEmail from "@/app/(root)/(auth)/(verify-email)/verify-email";
 import More from "@/app/(root)/(more)/more";
 import Register from "@/app/(root)/(auth)/register/[step]";
 import GoBackButton from "@/components/GoBackButton";
 import { ThemedText } from "@/components/ThemedText";
+import TabsLayout from "@/app/(root)/(tabs)/_layout";
 
 const Stack = createNativeStackNavigator();
-
 
 export default function RouteProviders() {
     const { user, isLoading } = useFetchUser();
 
-    if(isLoading) {
-        return <View></View>;
-    }
-
-    if(!user) {
+    if(false) {
         return (
             <Stack.Navigator screenOptions={{ headerShown: false }}>
                 <Stack.Screen name="Index" component={Index} />
@@ -28,7 +23,7 @@ export default function RouteProviders() {
         )
     }
 
-    if(!user.is_email_verified) {
+    if(!true) {
         return (
             <Stack.Navigator screenOptions={{ headerShown: false }}>
                 <Stack.Screen name="verify-email" component={VerifyEmail} />
@@ -51,7 +46,7 @@ export default function RouteProviders() {
 
     return (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="explore" component={Explore} />
+            <Stack.Screen name="explore" component={TabsLayout} />
         </Stack.Navigator>
     )
 }

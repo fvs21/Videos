@@ -9,11 +9,13 @@ import DateTimePicker, { DateTimePickerEvent } from "@react-native-community/dat
 import { validateAge } from "../../utils";
 import PrimaryDisabledButton from "@/components/PrimaryDisabledButton";
 import { useDateOfBirthAtom } from "../../store";
+import { useNavigation } from "expo-router";
 
 export default function RegistrationOne() {
     const [dateOfBirth, setDateOfBirth] = useDateOfBirthAtom();
     const [displayedDate, setDisplayedDate] = useState(dateOfBirth.toDateString());
     const [validAge, setValidAge] = useState(validateAge(dateOfBirth.toDateString()));
+    const navigation = useNavigation<any>();
 
     function changeDate(event: DateTimePickerEvent, selectedDate: Date | undefined) {
         if(selectedDate === undefined) return;
@@ -29,7 +31,7 @@ export default function RegistrationOne() {
             return;
         }   
 
-        router.push("/register/1");
+        navigation.push('Register', {step: '1'});
     }
 
     return (

@@ -1,10 +1,10 @@
 import ThemedSafeAreaView from "@/components/ThemedSafeAreaView";
-import { View, Text, SafeAreaView } from "react-native";
+import { Text } from "react-native";
 
-export default function Explore() {
+export default function Profile() {
     return (
         <ThemedSafeAreaView>
-            <Text>Explore</Text>
+            <Text>Profile</Text>
         </ThemedSafeAreaView>
     )
 }

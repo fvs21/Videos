@@ -1,7 +1,7 @@
 import { ThemedText } from '@/components/ThemedText'
 import { View } from 'react-native'
 import { styles } from './Registration.style'
-import { router } from 'expo-router'
+import { router, useNavigation } from 'expo-router'
 import GoBackButton from '@/components/GoBackButton'
 import PrimaryDisabledButton from '@/components/PrimaryDisabledButton'
 import { useDateOfBirthAtom, useEmailAtom, usePasswordAtom, useUsernameAtom } from '../../store'
@@ -11,6 +11,7 @@ import { RegistrationData } from '../../types'
 import PasswordInput from '@/components/PasswordInput'
 
 export default function RegistrationFour() {
+    const navigation = useNavigation<any>();
     const [password, setPassword] = usePasswordAtom();
     const disabled = !validatePassword(password);
 
@@ -31,7 +32,7 @@ export default function RegistrationFour() {
         
         try {
             await register(body);
-            router.push("/register/4");
+            navigation.push('Register', {step: '4'});
         } catch(error) {
             console.log(error);
         }

@@ -1,7 +1,7 @@
 import { ThemedText } from '@/components/ThemedText'
 import { View } from 'react-native'
 import { styles } from './Registration.style'
-import { router } from 'expo-router'
+import { useNavigation } from 'expo-router'
 import GoBackButton from '@/components/GoBackButton'
 import PrimaryDisabledButton from '@/components/PrimaryDisabledButton'
 import { useUsernameAtom } from '../../store'
@@ -16,7 +16,8 @@ export default function RegistrationTwo() {
     const [error, setError] = useState<string>("");
 
     const { checkUsernameAvailability, isPending } = useCheckUsernameAvailability();
-
+    const navigation = useNavigation<any>();
+    
     async function checkUsername() {
         if(username.length < 3) 
             return;
@@ -78,7 +79,7 @@ export default function RegistrationTwo() {
                 </View>
                 <PrimaryDisabledButton 
                     text='Next' 
-                    click={() => router.push("/register/2")}
+                    click={() => navigation.push('Register', {step: '2'})}
                     disabled={!isUsernameValid || isPending}    
                 />
             </View>

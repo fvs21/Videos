@@ -58,5 +58,14 @@ export const styles = StyleSheet.create({
     },
     verificationHeaderText: {
         fontSize: 18
+    },
+    resendCodeBtn: {
+        borderRadius: 12,
+        marginVertical: 20
+    },
+    resendCode: {
+        color: Colors.primary300,
+        fontSize: 16,
+        fontFamily: "Rubik-Medium"
     }
 })  
