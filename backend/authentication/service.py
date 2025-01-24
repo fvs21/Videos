@@ -15,6 +15,8 @@ import logging
 from django.utils import timezone
 from typing import Optional
 
+logging.basicConfig(level=logging.INFO)
+
 def generate_tokens_for_user(user: User) -> dict[str, str]:
     refresh_token = RefreshToken.for_user(user)
     return {
@@ -136,7 +138,8 @@ def check_email_verification(request: HttpRequest) -> JsonResponse:
     if verification_data is None:
         raise VerificationException("Email is already verified", 409) 
     
-    verification_code = request.GET.get("code")
+    json = JSONParser().parse(request)
+    verification_code = json.get("code")
 
     if verification_code is None:
         raise VerificationException("No verification code provided", 400)

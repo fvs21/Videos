@@ -11,6 +11,6 @@ export type User = {
     phone: string;
     countryCode: string;
     profile_picture_url: string;
-    is_email_verified: boolean;
-    is_phone_verified: boolean;
+    has_email_verified: boolean;
+    has_phone_verified: boolean;
 }

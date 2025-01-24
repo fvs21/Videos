@@ -32,10 +32,18 @@ export default function RegistrationFive() {
         
         try {
             // Add your verification logic here
-            //await verifyEmail(Number.parseInt(verificationCode));
-            setUser({...user, is_email_verified: true});
-        } catch(error) {
-            console.log(error);
+            await verifyEmail(Number.parseInt(verificationCode));
+        } catch(error: any) {
+            console.log(error.response.data);
+        }
+    }
+
+    async function handleResendCode() {
+        try {
+            const request = await resendEmailVerification();
+            console.log(request);
+        } catch(error: any) {
+            console.log(error.response.data);
         }
     }
 
@@ -61,7 +69,7 @@ export default function RegistrationFive() {
                         weight='300' 
                         type='default' 
                         style={[styles.label, {marginBottom: 10}]}>
-                            Enter the 6-digit code sent to {"pornelius@gmail.com"}
+                            Enter the 6-digit code sent to {user.email}
                     </ThemedText>
                     <AuthenticationInput 
                         value={verificationCode} 
@@ -74,13 +82,13 @@ export default function RegistrationFive() {
                         maxLength={6}
                         autoCapitalize='none'
                     />
-                    <TouchableOpacity style={styles.resendCodeBtn} onPress={() => {}}>
+                    <TouchableOpacity style={styles.resendCodeBtn} onPress={handleResendCode} disabled={resendEmailVerificationDisabled}>
                         <Text style={styles.resendCode}>Resend code</Text>
                     </TouchableOpacity>
                     <PrimaryDisabledButton 
                         text='Next' 
                         click={handleSubmit}
-                        disabled={disabled}    
+                        disabled={disabled || verifyEmailDisabled}    
                     />
                 </View>
             </View>

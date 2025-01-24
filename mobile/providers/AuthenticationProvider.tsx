@@ -28,7 +28,7 @@ export default function AuthenticationProvider({ children }: { children: React.R
     useLayoutEffect(() => {
         const interceptor = api.interceptors.request.use(
             (config) => {
-                config.headers.Authorization = !(config as any)._retry && token ? `Bearer ${token}` : undefined;
+                config.headers.Authorization = !(config as any)._retry && token ? `Bearer ${token}` : config.headers.Authorization;
                 return config;
             }
         )

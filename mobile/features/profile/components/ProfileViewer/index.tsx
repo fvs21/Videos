@@ -4,12 +4,16 @@ import { ThemedText } from "@/components/ThemedText";
 import { User } from "@/types/globals";
 import PersonFill from "@/components/svgs/PersonFill";
 import { useUser } from "@/store";
+import { useNavigation } from "@react-navigation/native";
 
 export default function ProfileViewer({user} : {user: User}) {
     const theme = useColorScheme() ?? 'light';
     const isDark = theme === 'dark';
 
+    const navigation = useNavigation<any>();
+
     const [currentUser] = useUser();
+    const isCurrentUsersAccount = currentUser.username === user.username;
 
     return (
         <>
@@ -19,6 +23,7 @@ export default function ProfileViewer({user} : {user: User}) {
                 </ThemedText>
                 <TouchableOpacity 
                     style={styles.optionsButton}
+                    onPress={() => navigation.navigate('Configuration')}
                 >
                     <ThemedText weight="300" type="defaultSemiBold" style={styles.headerUsername}>
                         •••
@@ -42,9 +47,9 @@ export default function ProfileViewer({user} : {user: User}) {
                     <View style={styles.userInfo}>
                         <ThemedText weight="300" type="defaultSemiBold" style={styles.fullName}>Fabrizio Vanzani</ThemedText>
                     </View>
-                    {currentUser.username === user.username &&
+                    {isCurrentUsersAccount &&
                         <View style={styles.editProfileButtonContainer}>
-                            <TouchableOpacity style={[styles.editProfileButton, isDark ? styles.editProfileButtonDark : styles.editProfileButtonLight]}>
+                            <TouchableOpacity style={[styles.editProfileButton, isDark ? styles.editProfileButtonDark : styles.editProfileButtonLight]} onPress={() => navigation.navigate('EditProfile')}>
                                 <ThemedText weight="300" type="defaultSemiBold" style={styles.editProfileButtonText}>
                                     Edit Profile
                                 </ThemedText>
