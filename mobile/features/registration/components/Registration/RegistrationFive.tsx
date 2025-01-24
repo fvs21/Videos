@@ -2,24 +2,38 @@ import { ThemedText } from '@/components/ThemedText'
 import { Text, TouchableOpacity, View } from 'react-native'
 import { styles } from './Registration.style'
 import AuthenticationInput from '@/components/AuthenticationInput'
-import { useNavigation } from 'expo-router'
+import { useNavigation } from '@react-navigation/native'
 import PrimaryDisabledButton from '@/components/PrimaryDisabledButton'
 import { useState } from 'react'
 import { useUser } from '@/store'
+import { useResendEmailVerification } from '../../api'
+import { useVerifyEmail } from '../../api'
 
 export default function RegistrationFive() {
-    const [user] = useUser();
+    const [user, setUser] = useUser();
     const [verificationCode, setVerificationCode] = useState('');
     const disabled = verificationCode.length !== 6;
     const navigation = useNavigation<any>();
 
+    const { 
+        verifyEmail, 
+        isPending, 
+        verifyEmailDisabled 
+    } = useVerifyEmail();
+
+    const { 
+        resendEmailVerification, 
+        isPending: resendEmailVerificationPending, 
+        resendEmailVerificationDisabled 
+    } = useResendEmailVerification();
+    
     async function handleSubmit() {
         if (disabled) return;
         
         try {
             // Add your verification logic here
-            // await verifyEmail(email, verificationCode);
-            //navigation.push('Register', {step: 'success'});
+            //await verifyEmail(Number.parseInt(verificationCode));
+            setUser({...user, is_email_verified: true});
         } catch(error) {
             console.log(error);
         }

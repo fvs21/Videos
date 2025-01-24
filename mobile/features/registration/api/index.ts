@@ -1,6 +1,6 @@
 import { apiGuest } from '@/api';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { RegistrationData, RegistrationResponse } from '../types';
+import { RegistrationData, RegistrationResponse, VerifyEmailData } from '../types';
 import * as SecureStore from 'expo-secure-store';
 
 export function useCheckUsernameAvailability() {
@@ -36,5 +36,35 @@ export function useRegister() {
         register, 
         isPending,
         registerDisabled: isPending && !isError
+    }
+}
+
+export function useVerifyEmail() {
+    const { mutateAsync: verifyEmail, isPending, isError } = useMutation({
+        mutationFn: async (body: number) => {
+            const request = await apiGuest.post('/auth/verify-email', body);
+            return request.data;
+        }
+    });
+
+    return {
+        verifyEmail,
+        isPending,
+        verifyEmailDisabled: isPending && !isError
+    }
+}
+
+export function useResendEmailVerification() {
+    const { mutateAsync: resendEmailVerification, isPending, isError } = useMutation({
+        mutationFn: async () => {
+            const request = await apiGuest.post('/auth/email/code');
+            return request.data;
+        }
+    });
+
+    return {
+        resendEmailVerification,
+        isPending,
+        resendEmailVerificationDisabled: isPending && !isError
     }
 }

@@ -1,0 +1,87 @@
+import { Image, ScrollView, TouchableOpacity, View, useColorScheme } from "react-native";
+import { styles } from "./ProfileViewer.style";
+import { ThemedText } from "@/components/ThemedText";
+import { User } from "@/types/globals";
+import PersonFill from "@/components/svgs/PersonFill";
+import { useUser } from "@/store";
+
+export default function ProfileViewer({user} : {user: User}) {
+    const theme = useColorScheme() ?? 'light';
+    const isDark = theme === 'dark';
+
+    const [currentUser] = useUser();
+
+    return (
+        <>
+            <View style={styles.fixedHeader}>
+                <ThemedText weight="300" type="defaultSemiBold" style={styles.headerUsername}>
+                    {user.username}
+                </ThemedText>
+                <TouchableOpacity 
+                    style={styles.optionsButton}
+                >
+                    <ThemedText weight="300" type="defaultSemiBold" style={styles.headerUsername}>
+                        •••
+                    </ThemedText>
+                </TouchableOpacity>
+            </View>
+            <ScrollView style={styles.container}>
+                <View style={styles.profileSection}>
+                    <View style={styles.photoContainer}>
+                        {true ? (
+                            <Image 
+                                source={{ uri: "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg" }} 
+                                style={styles.photo}
+                            />
+                        ) : (
+                            <View style={{ padding: 20, borderWidth: 1, borderColor: 'red' }}>
+                                <PersonFill width={40} color={isDark ? 'white' : 'black'} />
+                            </View>
+                        )}
+                    </View>
+                    <View style={styles.userInfo}>
+                        <ThemedText weight="300" type="defaultSemiBold" style={styles.fullName}>Fabrizio Vanzani</ThemedText>
+                    </View>
+                    {currentUser.username === user.username &&
+                        <View style={styles.editProfileButtonContainer}>
+                            <TouchableOpacity style={[styles.editProfileButton, isDark ? styles.editProfileButtonDark : styles.editProfileButtonLight]}>
+                                <ThemedText weight="300" type="defaultSemiBold" style={styles.editProfileButtonText}>
+                                    Edit Profile
+                                </ThemedText>
+                            </TouchableOpacity>
+                        </View>
+                    }
+                </View>
+                <View style={styles.statsRow}>
+                    <TouchableOpacity style={styles.statItem}>
+                        <ThemedText weight="300" type="defaultSemiBold" style={styles.statValue}>
+                            0
+                        </ThemedText>
+                        <ThemedText weight="300" type="default" style={styles.statLabel}>
+                            Posts
+                        </ThemedText>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.statItem}>
+                        <ThemedText weight="300" type="defaultSemiBold" style={styles.statValue}>
+                            0
+                        </ThemedText>
+                        <ThemedText weight="300" type="default" style={styles.statLabel}>
+                            Followers
+                        </ThemedText>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.statItem}>
+                        <ThemedText weight="300" type="defaultSemiBold" style={styles.statValue}>
+                            0
+                        </ThemedText>
+                        <ThemedText weight="300" type="default" style={styles.statLabel}>
+                            Following
+                        </ThemedText>
+                    </TouchableOpacity>
+                </View>
+                <ThemedText weight="300" type="defaultSemiBold" style={styles.sectionTitle}>
+                    Posts
+                </ThemedText>
+            </ScrollView>
+        </>
+    )
+}

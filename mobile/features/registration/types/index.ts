@@ -16,3 +16,7 @@ export type RegistrationResponse = {
     access_token: string;
     refresh_token: string;
 }
+
+export type VerifyEmailData = {
+    code: string;
+}
