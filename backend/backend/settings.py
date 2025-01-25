@@ -34,6 +34,9 @@ ALLOWED_HOSTS = ['*']
 
 # Application definition
 
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+
 ACCESS_TOKEN_DURATION = 60*15
 REFRESH_TOKEN_DURATION = 60*60*24*30
 
@@ -55,6 +58,8 @@ INSTALLED_APPS = [
     'user.apps.UserConfig',
     'friend.apps.FriendConfig',
     'explore.apps.ExploreConfig',
+    'post.apps.PostConfig',
+    'video.apps.VideoConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

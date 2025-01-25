@@ -1,19 +1,20 @@
 from celery import shared_task
 import subprocess
 from pathlib import Path
-
+import logging
 from video.models import Video, VideoResolution
 
+logging.basicConfig(level=logging.INFO)
+
 @shared_task
-def process_video_task(video: Video):
+def process_video_task(video_id: int) -> None:
     '''
     method to process the video. Creates the master playlist, and using ffmpeg, creates 
     many resolutions of the video and splits each one into chunks.
     resolutions: 240p, 480p, 720p
     '''
-    
-    video_id: int = video.id
     try:
+        video = Video.objects.get(id=video_id)
         base_path: str = f"videos/processed/{video_id}"
         master_playlist_path: str = f"{base_path}/master.m3u8"
         resolutions: list[str] = ["240p", "480p", "720p"]
@@ -21,6 +22,11 @@ def process_video_task(video: Video):
         for resolution in resolutions:
             create_directory(f"{base_path}/{resolution}")
 
+        '''
+            this command is used to generate all of the resolutions of the video
+            the ts file (transport stream) is the splitted chunks of the video extension
+            the m3u8 file is the master playlist that contains all of the resolutions and the chunks
+        '''
         command: list = [
             "ffmpeg", "-i", video.original_video.path,
 
@@ -45,6 +51,7 @@ def process_video_task(video: Video):
             #generate master playlist
             "-master_pl_name", master_playlist_path,
         ]
+        logging.info(f"Processing video {video_id}")
 
         subprocess.run(command, check=True)
 
@@ -59,9 +66,15 @@ def process_video_task(video: Video):
         video.save()
 
 def create_directory(path: str):
+    '''
+    create a directory at the given path
+    '''
     Path(path).mkdir(parents=True, exist_ok=True)
 
 def create_resolution_object(video: Video, path: str) -> VideoResolution:
+    '''
+    create a video resolution object for the given video and path
+    '''
     resolution_path = Path(path)
     chunk_count = len(list(resolution_path.glob("*.ts")))
 

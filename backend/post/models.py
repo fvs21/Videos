@@ -6,6 +6,8 @@ from user.models import User
 from django.utils.deconstruct import deconstructible
 import os
 
+from video.models import Video
+
 @deconstructible
 class PathName(object):
     def __init__(self):
@@ -19,10 +21,10 @@ class PathName(object):
 class Post(models.Model):
     description = models.CharField(max_length=250)
     created_at = models.DateTimeField(auto_now_add=True)
-    creator = models.ManyToOneRel(User, on_delete=models.CASCADE)
+    creator = models.ForeignKey(User, on_delete=models.CASCADE)
     likes = models.BigIntegerField(default=0)
-    url = models.URLField(name="post_url")
-    video = models.FileField(upload_to=PathName())
+    #url = models.URLField(name="post_url")
+    video = models.ForeignKey(Video, on_delete=models.CASCADE)
 
 class Comment(models.Model):
     creator = models.ForeignKey(User, on_delete=models.CASCADE)
