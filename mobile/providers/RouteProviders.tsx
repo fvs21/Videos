@@ -1,5 +1,5 @@
 import { useFetchUser } from "@/api/hooks/auth";
-import { ActivityIndicator, useColorScheme, View } from "react-native";
+import { useColorScheme, View } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Index from "@/app/(root)";
 import VerifyEmail from "@/app/(root)/(auth)/(verify-email)/verify-email";
@@ -10,7 +10,7 @@ import { ThemedText } from "@/components/ThemedText";
 import TabsLayout from "@/app/(root)/(tabs)/_layout";
 import Configuration from "@/app/(root)/(configuration)/configuration";
 import { Colors } from "@/styles/variables";
-import EditProfile from "@/app/(root)/(tabs)/(profile)/edit";
+import EditProfile from "@/app/(root)/(tabs)/(profile)/(edit)/edit";
 
 const Stack = createNativeStackNavigator();
 
@@ -32,7 +32,7 @@ export default function RouteProviders() {
         )
     }
 
-    if(!user.has_email_verified) {
+    if(!user?.has_email_verified) {
         return (
             <Stack.Navigator screenOptions={{ headerShown: false }}>
                 <Stack.Screen name="verify-email" component={VerifyEmail} />

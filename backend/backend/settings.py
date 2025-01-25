@@ -53,6 +53,8 @@ INSTALLED_APPS = [
     'authentication.apps.AuthenticationConfig',
     'image.apps.ImageConfig',
     'user.apps.UserConfig',
+    'friend.apps.FriendConfig',
+    'explore.apps.ExploreConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

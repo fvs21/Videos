@@ -45,9 +45,8 @@ export const useFetchUser = () => {
         queryKey: ['user'],
         queryFn: async (): Promise<User> => {
             const request = await api.get('/auth/session');
-            
             return request.data;
-        }
+        }, 
     });
 
     return {

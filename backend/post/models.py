@@ -9,7 +9,7 @@ import os
 @deconstructible
 class PathName(object):
     def __init__(self):
-        self.path = "videos"
+        self.path = "videos/raw"
 
     def __call__(self, instance, filename):
         extension = os.path.splitext(filename)[1]
@@ -26,6 +26,12 @@ class Post(models.Model):
 
 class Comment(models.Model):
     creator = models.ForeignKey(User, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
     comment = models.CharField(max_length=80)
     likes = models.BigIntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+class Like(models.Model):
+    creator = models.ForeignKey(User, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)

@@ -8,16 +8,7 @@ import ProfileViewer from '@/features/profile/components/ProfileViewer';
 
 export default function Profile() {
     const [user] = useUser();
-    const theme = useColorScheme() ?? 'light';
-    const isDark = theme === 'dark';
-
-
-    const handleOptions = () => {
-        //router.push('/options');
-    };
-
-    if (!user) return null;
-
+    
     return (
         <ThemedSafeAreaView>
             <ProfileViewer user={user} />
