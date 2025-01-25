@@ -1,7 +1,16 @@
 from rest_framework import serializers
-
+from django.core.files.uploadedfile import UploadedFile
+from video.models import Video
 from post.models import Post
-from video.service import store_video
+
+
+class CreatePostSerializer_(serializers.Serializer):
+    description = serializers.CharField(max_length=255)
+    video = serializers.FileField()
+    creator = serializers.IntegerField()
+
+    def validate_video(self, value: UploadedFile) -> Video:
+        pass
 
 class CreatePostSerializer(serializers.ModelSerializer):
     class Meta:
