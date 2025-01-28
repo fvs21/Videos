@@ -67,6 +67,7 @@ class User(AbstractBaseUser):
         return VerificationData.objects.get(user=self, field="email").code
 
     def pfp_url(self) -> str:
+        return "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg"
         if self.profile_picture is None:
             return "/api/image/default-pfp.jpg"
         return self.profile_picture.image_url

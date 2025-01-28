@@ -10,7 +10,7 @@ export type User = {
     full_name: string;
     phone: string;
     countryCode: string;
-    profile_picture_url: string;
+    pfp_url: string;
     has_email_verified: boolean;
     has_phone_verified: boolean;
 }

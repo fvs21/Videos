@@ -5,7 +5,6 @@ import { Text, useColorScheme, View } from "react-native";
 import HouseFill from "@/components/svgs/HouseFill";
 import House from "@/components/svgs/House";
 import { styles } from "./layout.style";
-import { ThemedText } from "@/components/ThemedText";
 import { Colors } from "@/styles/variables";
 import Person from "@/components/svgs/Person";
 import PersonFill from "@/components/svgs/PersonFill";
@@ -60,7 +59,7 @@ export default function TabsLayout() {
             />
             <Tab.Screen 
                 name="Search" 
-                component={Home} 
+                component={Profile} 
                 options={{
                     tabBarIcon: ({ focused }) => {
                         if(focused) {
@@ -72,7 +71,7 @@ export default function TabsLayout() {
             />
             <Tab.Screen 
                 name="Create" 
-                component={Home} 
+                component={Profile} 
                 options={{
                     tabBarIcon: ({ focused }) => {
                         if(focused) {
@@ -84,7 +83,7 @@ export default function TabsLayout() {
             />
             <Tab.Screen 
                 name="Chat" 
-                component={Home} 
+                component={Profile} 
                 options={{
                     tabBarIcon: ({ focused }) => {
                         if(focused) {

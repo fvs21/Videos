@@ -34,5 +34,11 @@ export const styles = StyleSheet.create({
     },
     editablePlaceholder: {
         color: "gray"
+    },
+    privateInfoNote: {
+        paddingHorizontal: 18,
+        paddingBottom: 8,
+        fontSize: 14,
+        color: "gray"
     }
 })

@@ -35,7 +35,7 @@ export default function ProfileViewer({user} : {user: User}) {
                     <View style={styles.photoContainer}>
                         {true ? (
                             <Image 
-                                source={{ uri: "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg" }} 
+                                source={{ uri: user.pfp_url }} 
                                 style={styles.photo}
                             />
                         ) : (

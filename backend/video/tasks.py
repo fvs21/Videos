@@ -20,7 +20,7 @@ def process_video_task(video_id: int) -> None:
         master_playlist_path: str = f"{base_path}/master.m3u8"
         resolutions: list[str] = ["v0", "v1", "v2"]
 
-        base_segments_url = "http://localhost:8000/api/video/segment"
+        base_segments_url = "http://192.168.68.100:8000/api/video/segment"
 
         for resolution in resolutions:
             create_directory(f"{base_path}/{resolution}")

@@ -11,4 +11,5 @@ def serve_video_playlist(request, video_id, resolution):
 
 def serve_video_segment(request, video_id, resolution, segment):
     segment_path = retrieve_video_segment(video_id, resolution, segment)
-    return FileResponse(open(segment_path, "rb"), content_type="video/mp2t")
+    print(segment_path)
+    return FileResponse(open(segment_path, "rb"))

@@ -2,5 +2,5 @@
 env
 .vscode
 mobile/ios
-backend/videos/**
-backend/images/**
+backend/videos
+backend/images
