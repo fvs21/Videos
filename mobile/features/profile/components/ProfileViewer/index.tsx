@@ -5,6 +5,8 @@ import { User } from "@/types/globals";
 import PersonFill from "@/components/svgs/PersonFill";
 import { useUser } from "@/store";
 import { useNavigation } from "@react-navigation/native";
+import React from "react";
+import Shop from "@/components/svgs/Shop";
 
 export default function ProfileViewer({user} : {user: User}) {
     const theme = useColorScheme() ?? 'light';
@@ -16,19 +18,22 @@ export default function ProfileViewer({user} : {user: User}) {
     const isCurrentUsersAccount = currentUser.username === user.username;
 
     return (
-        <>
+        <React.Fragment>
             <View style={styles.fixedHeader}>
                 <ThemedText weight="300" type="defaultSemiBold" style={styles.headerUsername}>
                     {user.username}
                 </ThemedText>
-                <TouchableOpacity 
-                    style={styles.optionsButton}
-                    onPress={() => navigation.navigate('Configuration')}
-                >
-                    <ThemedText weight="300" type="defaultSemiBold" style={styles.headerUsername}>
-                        •••
-                    </ThemedText>
-                </TouchableOpacity>
+                <View style={styles.topButtons}>
+                    <TouchableOpacity style={styles.optionsButton}>
+                        <Shop width={20} color={isDark ? 'white' : 'black'} />
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.optionsButton} onPress={() => navigation.navigate('Configuration')}>
+                        <ThemedText weight="300" type="defaultSemiBold" style={styles.headerUsername}>
+                            •••
+                        </ThemedText>
+                    </TouchableOpacity>
+
+                </View>
             </View>
             <ScrollView style={styles.container}>
                 <View style={styles.profileSection}>
@@ -87,6 +92,6 @@ export default function ProfileViewer({user} : {user: User}) {
                     Posts
                 </ThemedText>
             </ScrollView>
-        </>
+        </React.Fragment>
     )
 }

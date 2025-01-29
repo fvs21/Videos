@@ -10,12 +10,18 @@ class CreatePostSerializer_(serializers.Serializer):
     creator = serializers.IntegerField()
 
     def validate_video(self, value: UploadedFile) -> Video:
+        #check if the video has valid extension and length
         pass
 
 class CreatePostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
-        fields = ["description", "video", "creator"]
+        fields = [
+            "description",
+            "video",
+            "creator",
+            "products"
+        ]
 
     def create(self, validated_data: dict) -> Post:
         post = Post.objects.create(

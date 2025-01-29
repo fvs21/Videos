@@ -49,6 +49,8 @@ class User(AbstractBaseUser):
     password_reset_token_created_at = models.DateTimeField(null=True, blank=True)
     password_updated_at = models.DateTimeField(null=True, blank=True)
 
+    addresses = models.ManyToManyField("Address", blank=True)
+
     USERNAME_FIELD = "username"
     REQUIRED_FIELDS = ["email", "date_of_birth", "password"]
 
@@ -95,3 +97,14 @@ class VerificationData(models.Model):
     
     def can_request_new_code(self) -> bool:
         return self.created_at + timedelta(minutes=5) < timezone.now()
+
+class Address(models.Model):
+    name = models.CharField(max_length=30)
+    country = models.CharField(max_length=60)
+    state = models.CharField(max_length=60)
+    city = models.CharField(max_length=60)
+    address = models.CharField(max_length=1024)
+    zip_code = models.CharField(max_length=12)
+
+    def __str__(self) -> str:
+        return f"{self.name} - {self.address} - {self.city} - {self.state} - {self.country} - {self.zip_code}"

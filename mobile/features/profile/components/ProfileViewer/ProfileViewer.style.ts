@@ -98,4 +98,9 @@ export const styles = StyleSheet.create({
     optionsButton: {
         padding: 8,
     },
+    topButtons: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 10,
+    },
 }); 

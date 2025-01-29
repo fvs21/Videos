@@ -1,6 +1,7 @@
 import uuid
 from django.db import models
 
+from store.models import Product
 from user.models import User
 
 from django.utils.deconstruct import deconstructible
@@ -25,6 +26,7 @@ class Post(models.Model):
     likes = models.BigIntegerField(default=0)
     #url = models.URLField(name="post_url")
     video = models.ForeignKey(Video, on_delete=models.CASCADE)
+    products = models.ManyToManyField(Product, blank=True)
 
 class Comment(models.Model):
     creator = models.ForeignKey(User, on_delete=models.CASCADE)
