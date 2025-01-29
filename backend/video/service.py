@@ -2,7 +2,7 @@ import os
 import uuid
 
 from django.http import Http404
-from video.exceptions import VideoFetchingException
+from video.exceptions import UnableToUploadVideoException, VideoFetchingException
 from video.models import Video
 from django.core.files.uploadedfile import UploadedFile, InMemoryUploadedFile
 from . tasks import process_video_task
@@ -16,6 +16,10 @@ def store_video(file: UploadedFile) -> Video:
     store the data as a video object in the database
     begin the processing of the video
     '''
+
+    if not file.content_type in ['mp4', 'mov']:
+        raise UnableToUploadVideoException("Unsupported video file type", 400)
+
     video_name = generate_video_name(file)
     video = Video.objects.create(name=video_name, original_video=file)
     process_video_task.delay(video.id)

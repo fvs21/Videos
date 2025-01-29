@@ -194,7 +194,7 @@ def generate_and_send_password_reset_token(request: HttpRequest) -> JsonResponse
     user.password_reset_token = make_password(password_reset_token)
     user.password_reset_token_created_at = timezone.now()
 
-    print(f"Password reset token for {user.email}: {password_reset_token}")
+    logging.info(f"Password reset token for {user.email}: {password_reset_token}")
 
     #send email or sms
 
@@ -222,6 +222,4 @@ def reset_password(request: HttpRequest) -> JsonResponse:
 
 def check_username_availability(request: HttpRequest) -> bool:
     username = request.GET.get("username")
-    user = User.objects.filter(username=username).first()
-
-    return user is None
+    return User.objects.filter(username=username).exists()
