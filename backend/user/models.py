@@ -97,6 +97,9 @@ class VerificationData(models.Model):
         return f"{self.user.username} for {self.field}: {self.code}"
     
     def can_request_new_code(self) -> bool:
+        return self.created_at + timedelta(seconds=45) < timezone.now()
+    
+    def is_code_expired(self) -> bool:
         return self.created_at + timedelta(minutes=5) < timezone.now()
 
 class Address(models.Model):

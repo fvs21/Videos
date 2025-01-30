@@ -99,38 +99,20 @@ def process_refresh_token(refresh_token: str) -> RefreshToken:
     except Exception:
         raise RefreshTokenException("Invalid refresh token", 401)
 
-def refresh_token(request: HttpRequest) -> JsonResponse:
-    refresh_token = request.COOKIES.get("user_r")
-    token = process_refresh_token(refresh_token)
-    return JsonResponse({"access_token": str(token.access_token)}, status=200)
-
-def mobile_refresh_token(request: HttpRequest) -> JsonResponse:
-    auth = request.headers.get("Authorization", '')
-
-    if auth is None:
-        raise RefreshTokenException("No authorization header provided", 401)
-
-    refresh_token = auth.replace('Bearer ', '')
-
-    token = process_refresh_token(refresh_token)
-    return JsonResponse({"access_token": str(token.access_token)}, status=200)
-
-def logout_user(request: HttpRequest) -> JsonResponse:
+def logout_session(request: HttpRequest) -> None:
     refresh_token = request.COOKIES.get("user_r")
 
     newToken = RefreshToken(refresh_token)
     newToken.blacklist()
-    return JsonResponse({"message", "Succesfully logged out"}, status=200)
 
-def mobile_logout_user(request: HttpRequest) -> JsonResponse:
+def mobile_logout_session(request: HttpRequest) -> None:
     auth = request.headers.get("Authorization", '')
     refresh_token = auth.replace('Bearer ', '')
 
     newToken = RefreshToken(refresh_token)
     newToken.blacklist()
-    return JsonResponse({"message", "Succesfully logged out"}, status=200)
 
-def check_email_verification(request: HttpRequest) -> JsonResponse:
+def check_email_verification(request: HttpRequest) -> bool:
     user: User = get_user_by_id(request.user.id)
 
     verification_data = VerificationData.objects.filter(user=user, field="email").first()
@@ -143,16 +125,20 @@ def check_email_verification(request: HttpRequest) -> JsonResponse:
 
     if verification_code is None:
         raise VerificationException("No verification code provided", 400)
-
-    if check_password(verification_code, verification_data.code):
-        user.email_verified_at = timezone.now()
-        user.save()
-
-        verification_data.delete()
-
-        return JsonResponse({"message": "Email verified"}, status=200)
     
-def resend_email_verification_code(request: HttpRequest) -> JsonResponse:
+    if not check_password(verification_code, verification_data.code):
+        return False
+    
+    if verification_data.is_code_expired():
+        raise VerificationException("Verification code expired", 400)
+    
+    user.email_verified_at = timezone.now()
+    user.save()
+
+    verification_data.delete()
+    return True
+
+def resend_email_verification_code(request: HttpRequest) -> bool:
     user: User = get_user_by_id(request.user.id)
 
     verification_data = VerificationData.objects.filter(user=user, field="email").first()
@@ -161,7 +147,7 @@ def resend_email_verification_code(request: HttpRequest) -> JsonResponse:
         raise VerificationException("Email is already verified", 409)
     
     if not verification_data.can_request_new_code():
-        raise VerificationException("You need to wait 5 minutes to request a new verification code", 429)
+        return False
     
     verification_code = AuthenticationUtils.generate_verification_code()
     verification_data.code = make_password(verification_code)
@@ -169,7 +155,7 @@ def resend_email_verification_code(request: HttpRequest) -> JsonResponse:
 
     logging.info(f"Verification code for {user.email}: {verification_code}")
 
-    return JsonResponse({"message": "Verification code sent"}, status=200)
+    return True
 
 def get_user_by_unknown_credential(credential: str) -> Optional[User]:
     credential_type = AuthenticationUtils.determine_credential_type(credential)
@@ -181,13 +167,13 @@ def get_user_by_unknown_credential(credential: str) -> Optional[User]:
     
     return None
 
-def generate_and_send_password_reset_token(request: HttpRequest) -> JsonResponse:
+def generate_and_send_password_reset_token(request: HttpRequest) -> bool:
     json = JSONParser().parse(request)
     credential = json.get('credential')
     user = get_user_by_unknown_credential(credential)
 
     if user is None:
-        raise UserDoesNotExistException()
+        return False
     
     password_reset_token: str = AuthenticationUtils.generate_verification_code()
 
@@ -199,10 +185,9 @@ def generate_and_send_password_reset_token(request: HttpRequest) -> JsonResponse
     #send email or sms
 
     user.save()
+    return True
 
-    return JsonResponse({"message": "Password reset token sent"}, status=200)
-
-def reset_password(request: HttpRequest) -> JsonResponse:
+def reset_password(request: HttpRequest) -> bool:
     json = JSONParser.parse(request)
     data = ResetPasswordSerializer(data=json)
 
@@ -218,7 +203,7 @@ def reset_password(request: HttpRequest) -> JsonResponse:
     
     user.reset_password(data.new_password)
 
-    return JsonResponse({"message": "Password reset successful"}, status=200)
+    return True
 
 def check_username_availability(request: HttpRequest) -> bool:
     username = request.GET.get("username")
