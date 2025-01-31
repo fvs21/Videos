@@ -11,6 +11,8 @@ import TabsLayout from "@/app/(root)/(tabs)/_layout";
 import Configuration from "@/app/(root)/(configuration)/configuration";
 import { Colors } from "@/styles/variables";
 import EditProfile from "@/app/(root)/(tabs)/(profile)/(edit)/edit";
+import CreateStore from "@/app/(root)/(store)/(create)/create";
+import Setup from "@/app/(root)/(store)/(setup)/setup";
 
 const Stack = createNativeStackNavigator();
 
@@ -19,11 +21,11 @@ export default function RouteProviders() {
     const theme = useColorScheme() ?? 'light';
     const isDark = theme === 'dark';
 
-    if(isLoading) {
+    if(isLoading && false) {
         return <View></View>
     }
 
-    if(!user) {
+    if(!user && false) {
         return (
             <Stack.Navigator screenOptions={{ headerShown: false }}>
                 <Stack.Screen name="Index" component={Index} />
@@ -32,7 +34,7 @@ export default function RouteProviders() {
         )
     }
 
-    if(!user?.has_email_verified) {
+    if(!user?.has_email_verified && false) {
         return (
             <Stack.Navigator screenOptions={{ headerShown: false }}>
                 <Stack.Screen name="verify-email" component={VerifyEmail} />
@@ -71,6 +73,20 @@ export default function RouteProviders() {
                     headerStyle: {
                         backgroundColor: isDark ? Colors.dark.background : Colors.light.background,
                     },
+                }}
+            />
+            <Stack.Screen 
+                name="CreateStore" 
+                component={CreateStore} 
+                options={{
+                    headerShown: false,
+                }}
+            />
+            <Stack.Screen
+                name="SetupStore"
+                component={Setup}
+                options={{
+                    headerShown: false,
                 }}
             />
         </Stack.Navigator>

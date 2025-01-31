@@ -65,17 +65,12 @@ def register_user(request: HttpRequest) -> User:
     return user
 
 
-def login_user(request: HttpRequest) -> User:
+def login_user(request: HttpRequest) -> Optional[User]:
     json = JSONParser().parse(request)
     username = json.get("username")
     password = json.get("password")
 
-    user: User = authenticate(username=username, password=password)
-
-    if user is None:
-        raise AuthenticationException("Invalid credentials", 400)
-    
-    return user
+    return authenticate(username=username, password=password)
 
 def get_session(request: HttpRequest) -> JsonResponse:
     user: User = get_user_by_id(request.user.id)
@@ -87,9 +82,9 @@ def get_user_by_id(id: int) -> User:
     except User.DoesNotExist:
         raise UserDoesNotExistException(status_code=404)
     
-def process_refresh_token(refresh_token: str) -> RefreshToken:
+def process_refresh_token(refresh_token: str) -> Optional[RefreshToken]:
     if not refresh_token:
-        raise RefreshTokenException("No refresh token provided", 401)
+        raise None
         
     try:
         token = RefreshToken(refresh_token)
@@ -97,7 +92,7 @@ def process_refresh_token(refresh_token: str) -> RefreshToken:
             raise RefreshTokenException("Token blacklisted", 409)
         return token
     except Exception:
-        raise RefreshTokenException("Invalid refresh token", 401)
+        return None
 
 def logout_session(request: HttpRequest) -> None:
     refresh_token = request.COOKIES.get("user_r")
@@ -191,7 +186,8 @@ def reset_password(request: HttpRequest) -> bool:
     json = JSONParser.parse(request)
     data = ResetPasswordSerializer(data=json)
 
-    data.validate()
+    if not data.is_valid():
+        raise ResetPasswordException(data.errors, 400)
 
     user = get_user_by_unknown_credential(data.credential)
 
@@ -199,7 +195,7 @@ def reset_password(request: HttpRequest) -> bool:
         raise UserDoesNotExistException()
     
     if not check_password(data.password_reset_token, user.password_reset_token):
-        raise ResetPasswordException("Invalid password reset token", 400)
+        return False
     
     user.reset_password(data.new_password)
 

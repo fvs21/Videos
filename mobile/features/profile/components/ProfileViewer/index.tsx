@@ -24,9 +24,19 @@ export default function ProfileViewer({user} : {user: User}) {
                     {user.username}
                 </ThemedText>
                 <View style={styles.topButtons}>
-                    <TouchableOpacity style={styles.optionsButton}>
-                        <Shop width={20} color={isDark ? 'white' : 'black'} />
-                    </TouchableOpacity>
+                    {isCurrentUsersAccount && 
+                        <TouchableOpacity style={styles.optionsButton} onPress={
+                            () => {
+                                if(user.is_seller) {
+                                    navigation.navigate('SetupStore');
+                                } else {
+                                    navigation.navigate('CreateStore');
+                                }
+                            }
+                        }>
+                            <Shop width={20} color={isDark ? 'white' : 'black'} />
+                        </TouchableOpacity>
+                    }
                     <TouchableOpacity style={styles.optionsButton} onPress={() => navigation.navigate('Configuration')}>
                         <ThemedText weight="300" type="defaultSemiBold" style={styles.headerUsername}>
                             •••

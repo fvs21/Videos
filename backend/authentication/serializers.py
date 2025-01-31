@@ -36,15 +36,15 @@ class ResetPasswordSerializer(serializers.Serializer):
 
     def validate_credential(self, value):
         if AuthenticationUtils.determine_credential_type(value) == "username":
-            raise UserDoesNotExistException()
+            raise serializers.ValidationError("User not found")
         return value
 
     def validate_new_password(self, value):
         if not 8 <= len(value) <= 20:
-            raise ResetPasswordException('You must choose a more secure password')
+            raise serializers.ValidationError('You must choose a more secure password')
         return value
     
     def validate_confirm_password(self, value):
         if value != self.new_password:
-            raise ResetPasswordException('Password don\' match')
+            raise serializers.ValidationError('Password don\' match')
         return value

@@ -11,7 +11,7 @@ class CreateStoreSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Store
-        fields = ["name", "owner"]
+        fields = ["owner"]
 
     def validate_picture(self, value: UploadedFile):
         if not value.content_type in ["image/jpeg", "image/png", "image/jpg"]:
@@ -63,7 +63,6 @@ class StoreSerializer(serializers.ModelSerializer):
         model = Store
         fields = [
             "id", 
-            "name", 
             "owner", 
             "store_picture_url",
             "products"

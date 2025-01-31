@@ -13,4 +13,5 @@ export type User = {
     pfp_url: string;
     has_email_verified: boolean;
     has_phone_verified: boolean;
+    is_seller: boolean;
 }
