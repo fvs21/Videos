@@ -8,6 +8,7 @@ export const useUser = (): [User, (user: User) => void] => {
         queryClient.setQueryData(['user'], user);
     }
 
+    /**
     return [
         {
             username: "fabriziovanzani",
@@ -23,6 +24,12 @@ export const useUser = (): [User, (user: User) => void] => {
         },
         setUser
     ]
+    */
+
+    setUser({
+        ...queryClient.getQueryData(['user']) as User,
+        is_seller: true,
+    });
     
     return [
         queryClient.getQueryData(['user']) as User,

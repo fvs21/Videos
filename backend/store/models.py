@@ -5,6 +5,7 @@ from user.models import User
 
 # Create your models here.
 class Store(models.Model):
+    name = models.CharField(max_length=100)
     store_picture = models.ForeignKey(Image, on_delete=models.CASCADE)
     owner = models.OneToOneField(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)

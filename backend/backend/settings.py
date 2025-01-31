@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     'explore.apps.ExploreConfig',
     'post.apps.PostConfig',
     'video.apps.VideoConfig',
+    'store.apps.StoreConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
