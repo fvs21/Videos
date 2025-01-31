@@ -6,7 +6,7 @@ import PersonFill from "@/components/svgs/PersonFill";
 import { useUser } from "@/store";
 import { useNavigation } from "@react-navigation/native";
 import React from "react";
-import Shop from "@/components/svgs/Shop";
+import ShopFill from "@/components/svgs/ShopFill";
 
 export default function ProfileViewer({user} : {user: User}) {
     const theme = useColorScheme() ?? 'light';
@@ -28,13 +28,13 @@ export default function ProfileViewer({user} : {user: User}) {
                         <TouchableOpacity style={styles.optionsButton} onPress={
                             () => {
                                 if(user.is_seller) {
-                                    navigation.navigate('SetupStore');
+                                    navigation.navigate('ViewStore');
                                 } else {
                                     navigation.navigate('CreateStore');
                                 }
                             }
                         }>
-                            <Shop width={20} color={isDark ? 'white' : 'black'} />
+                            <ShopFill width={24} color={isDark ? 'white' : 'black'} />
                         </TouchableOpacity>
                     }
                     <TouchableOpacity style={styles.optionsButton} onPress={() => navigation.navigate('Configuration')}>

@@ -1,8 +1,8 @@
 import ThemedSafeAreaView from "@/components/ThemedSafeAreaView";
-import { ThemedText } from "@/components/ThemedText";
 import StoreViewer from "@/features/store/components/StoreViewer";
+import { useState } from "react";
 
-export default function Setup() {
+export default function ViewStore() {
     return (
         <ThemedSafeAreaView>
             <StoreViewer />
