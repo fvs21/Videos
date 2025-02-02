@@ -69,6 +69,7 @@ export const styles = StyleSheet.create({
         backgroundColor: "rgba(0, 0, 0, 0.5)",
         justifyContent: "center",
         alignItems: "center",
+        borderRadius: 100,
     },
     editableStoreFooter: {
         padding: 20,
@@ -93,5 +94,10 @@ export const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
         elevation: 5,
+    },
+    modalHeader: {
+        padding: 20,
+        justifyContent: "space-between",
+        flexDirection: "row",
     }
 })

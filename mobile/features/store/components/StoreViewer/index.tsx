@@ -5,12 +5,10 @@ import { ProductDisplay as PD, Store } from "../../types";
 import { ThemedText } from "@/components/ThemedText";
 import ProductDisplay from "../ProductDisplay";
 import PencilFill from "@/components/svgs/PencilFill";
-import { useNavigation } from "@react-navigation/native";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import StoreSetup from "./StoreSetup";
 
 export default function StoreViewer() {
-    const navigation = useNavigation<any>();
     const fadeAnim = useRef(new Animated.Value(1)).current;
     const [editMode, setEditMode] = useState(false);
     
@@ -28,18 +26,36 @@ export default function StoreViewer() {
             id: "1",
             name: "Product 1 fdsanfjkdlsanfjdsaln dbsahjdb sahdbsahufkbdsah",
             price: 100,
-            product_image: "https://picsum.photos/200/300"
+            product_image: "https://img.kwcdn.com/product/fancy/market/5107d6f0859767b6350d6e1bfce05e0b_20xV8yDwi9xvh.jpg?imageView2/2/w/800/q/70/format/webp"
         },
         {
             id: "2",
             name: "Product 2",
             price: 200,
-            product_image: "https://picsum.photos/200/300"
+            product_image: "https://img.kwcdn.com/product/fancy/a34a45ca-56f5-4c9e-9636-a0d3ac11808f.jpg?imageView2/2/w/800/q/70/format/webp"
         },
         {
             id: "3",
             name: "Product 3",
             price: 300,
+            product_image: "https://img.kwcdn.com/product/fancy/4e131408-f81f-40a4-ae23-815be0836ea4.jpg?imageView2/2/w/800/q/70/format/webp"
+        },
+        {
+            id: "4",
+            name: "Product 4",
+            price: 400,
+            product_image: "https://img.kwcdn.com/product/fancy/ce1454c4-92c1-4e85-8269-b8245053b09f.jpg?imageView2/2/w/800/q/70/format/webp"
+        },
+        {
+            id: "5",
+            name: "Product 5",
+            price: 500,
+            product_image: "https://img.kwcdn.com/product/fancy/eea1b227-b3f3-4b43-874c-1391e586c0e5.jpg?imageView2/2/w/800/q/70/format/webp"
+        },
+        {
+            id: "6",
+            name: "Product 6",
+            price: 600,
             product_image: "https://picsum.photos/200/300"
         }
     ]
@@ -50,7 +66,7 @@ export default function StoreViewer() {
         // Start fade out
         Animated.timing(fadeAnim, {
             toValue: 0,
-            duration: 100,
+            duration: 60,
             useNativeDriver: true,
         }).start(() => {
             // Change mode after fade out
@@ -58,7 +74,7 @@ export default function StoreViewer() {
             // Start fade in
             Animated.timing(fadeAnim, {
                 toValue: 1,
-                duration: 100,
+                duration: 60,
                 useNativeDriver: true,
             }).start();
         });

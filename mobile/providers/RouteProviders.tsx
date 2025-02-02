@@ -21,7 +21,7 @@ export default function RouteProviders() {
     const theme = useColorScheme() ?? 'light';
     const isDark = theme === 'dark';
 
-    if(isLoading && false) {
+    if(isLoading) {
         return <View></View>
     }
 
