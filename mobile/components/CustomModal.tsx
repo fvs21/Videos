@@ -1,6 +1,6 @@
-import { BottomSheetModal, BottomSheetModalProvider } from "@gorhom/bottom-sheet";
-import React, { useEffect, useRef } from "react";
-import { TouchableWithoutFeedback } from "react-native";
+import BottomSheet, { BottomSheetBackdrop, BottomSheetModal, BottomSheetModalProvider, BottomSheetView } from "@gorhom/bottom-sheet";
+import React, { useCallback, useEffect, useRef } from "react";
+import { StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { FullWindowOverlay } from "react-native-screens";
 
@@ -8,39 +8,39 @@ type CustomModalProps = {
     children: React.ReactNode;
     style?: Object | Object[];
     visible: boolean;
-    handleClose?: () => void;
+    handleClose: () => void;
 }
 
 export default function CustomModal({children, style, visible, handleClose}: CustomModalProps) {
-    const bottomSheetRef = useRef<BottomSheetModal>(null);
+    const bottomSheetRef = useRef<BottomSheet>(null);
+
+    const renderBackdrop = useCallback((props: any) => 
+        <BottomSheetBackdrop {...props} appearsOnIndex={0} disappearsOnIndex={-1} />, []);
 
     useEffect(() => {
         if(visible) {
-            bottomSheetRef.current?.present();
+            bottomSheetRef.current?.expand();
         } else {
-            bottomSheetRef.current?.dismiss();
+            bottomSheetRef.current?.close();
         }
     }, [visible]);
 
     return (
         <FullWindowOverlay>
             <GestureHandlerRootView style={{flex: 1, justifyContent: "center"}}>
-                    <BottomSheetModalProvider>
-                        <BottomSheetModal
-                            ref={bottomSheetRef} 
-                            index={1} 
-                            snapPoints={['60%','90%']} 
-                            onDismiss={() => bottomSheetRef.current?.dismiss()}
-                        >
-                            <TouchableWithoutFeedback onPress={() => {
-                                bottomSheetRef.current?.dismiss();
-                                handleClose && handleClose();
-                            }}>
-                                {children}
-                            </TouchableWithoutFeedback>
-                        </BottomSheetModal>
-                    </BottomSheetModalProvider>
-                </GestureHandlerRootView>
+                <BottomSheet
+                    ref={bottomSheetRef}
+                    index={-1}
+                    snapPoints={['40%']}
+                    enablePanDownToClose={true}
+                    backdropComponent={renderBackdrop}
+                    onClose={handleClose}
+                >
+                    <BottomSheetView>
+                        <Text>Test</Text>
+                    </BottomSheetView>
+                </BottomSheet>
+            </GestureHandlerRootView>
         </FullWindowOverlay>
     )
 }

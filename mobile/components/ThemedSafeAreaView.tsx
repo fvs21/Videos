@@ -18,7 +18,7 @@ export default function ThemedSafeAreaView({className, ...rest}: ThemedSafeAreaV
 
 const styles = StyleSheet.create({
     container: {
-        height: "100%"
+        height: "100%",
     },
     dark: {
         backgroundColor: Colors.dark.background
