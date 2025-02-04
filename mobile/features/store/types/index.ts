@@ -22,3 +22,8 @@ export type Product = {
     images: string[];
     //more specific product information
 }
+
+export type CreateStoreRequest = {
+    name: string | null;
+    image: File | null;
+}

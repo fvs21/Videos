@@ -19,3 +19,11 @@ export const api = axios.create({
     },
     withCredentials: true
 });
+
+export const apiMultipart = axios.create({
+    baseURL: baseURL,
+    headers: {
+        'Content-Type': 'multipart/form-data',
+    },
+    withCredentials: true
+});

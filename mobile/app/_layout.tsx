@@ -5,6 +5,7 @@ import { Provider } from "jotai";
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import AuthenticationProvider from '@/providers/AuthenticationProvider';
 import RouteProviders from '@/providers/RouteProviders';
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 
 export default function Layout() {
   const [fontsLoaded] = useFonts({
@@ -32,7 +33,9 @@ export default function Layout() {
     <QueryClientProvider client={queryClient}>
       <Provider>
         <AuthenticationProvider>
-          <RouteProviders />
+          <BottomSheetModalProvider>
+            <RouteProviders />
+          </BottomSheetModalProvider>
         </AuthenticationProvider>
       </Provider>
     </QueryClientProvider>

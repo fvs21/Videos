@@ -13,6 +13,7 @@ import { Colors } from "@/styles/variables";
 import EditProfile from "@/app/(root)/(tabs)/(profile)/(edit)/edit";
 import CreateStore from "@/app/(root)/(store)/(create)/create";
 import ViewStore from "@/app/(root)/(store)/(view)/view";
+import Setup from "@/app/(root)/(store)/setup/[step]";
 
 const Stack = createNativeStackNavigator();
 
@@ -78,6 +79,13 @@ export default function RouteProviders() {
             <Stack.Screen 
                 name="CreateStore" 
                 component={CreateStore} 
+                options={{
+                    headerShown: false,
+                }}
+            />
+            <Stack.Screen
+                name="SetupStore"
+                component={Setup}
                 options={{
                     headerShown: false,
                 }}

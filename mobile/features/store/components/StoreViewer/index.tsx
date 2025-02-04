@@ -6,7 +6,7 @@ import { ThemedText } from "@/components/ThemedText";
 import ProductDisplay from "../ProductDisplay";
 import PencilFill from "@/components/svgs/PencilFill";
 import { useRef, useState } from "react";
-import StoreSetup from "./StoreSetup";
+import EditStore from "./EditStore";
 
 export default function StoreViewer() {
     const fadeAnim = useRef(new Animated.Value(1)).current;
@@ -83,7 +83,7 @@ export default function StoreViewer() {
     return (
         <Animated.View style={{ flex: 1, opacity: fadeAnim }}>
             {editMode ? (
-                <StoreSetup setEditMode={toggleEditMode} />
+                <EditStore setEditMode={toggleEditMode} />
             ) : (
                 <ScrollView style={styles.storeContainer}>
                     <View style={styles.storeHeader}>

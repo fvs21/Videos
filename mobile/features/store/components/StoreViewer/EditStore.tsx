@@ -12,7 +12,7 @@ import GoBackButton from "@/components/GoBackButton";
 import XLg from "@/components/svgs/XLg";
 import { Colors } from "@/styles/variables";
 
-export default function StoreSetup({setEditMode}: {setEditMode: (value: boolean) => void}) {
+export default function EditStore({setEditMode}: {setEditMode: (value: boolean) => void}) {
     const isDark = useColorScheme() === "dark";
 
     const [createProductModal, setCreateProductModal] = useState(false);

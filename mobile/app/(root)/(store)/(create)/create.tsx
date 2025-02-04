@@ -6,12 +6,14 @@ import GoBackButton from "@/components/GoBackButton";
 import { Colors } from "@/styles/variables";
 import Person from "@/components/svgs/Person";
 import Shop from "@/components/svgs/Shop";
+import { useNavigation } from "@react-navigation/native";
 
 export default function CreateStore() {
     const theme = useColorScheme() ?? "light";
     const isDark = theme === "dark";
     const borderColor = isDark ? Colors.dark.border : Colors.light.border;
     const svgColor = isDark ? "white" : "black";
+    const navigation = useNavigation<any>();
 
     return (
         <ThemedSafeAreaView>
@@ -23,7 +25,7 @@ export default function CreateStore() {
                     </ThemedText>
                 </View>
                 <View style={styles.createStoreOptionsContainer}>
-                    <TouchableOpacity style={[styles.createStoreOption, {borderColor: borderColor}]}>
+                    <TouchableOpacity style={[styles.createStoreOption, {borderColor: borderColor}]} onPress={() => navigation.navigate("SetupStore", {step: '0'})}>
                         <View style={styles.storeOptionHeader}>
                             <ThemedText weight="300" type="defaultSemiBold">
                                 Individual seller
