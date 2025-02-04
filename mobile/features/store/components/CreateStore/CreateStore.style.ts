@@ -57,5 +57,14 @@ export const styles = StyleSheet.create({
         color: Colors.primary300,
         fontSize: 18,
         fontFamily: "Rubik-Regular"
+    },
+    selectImageOption: {
+        paddingHorizontal: 22,
+        paddingVertical: 12,
+        flexDirection: "row",
+        gap: 10,
+    },
+    selectImageOptionIcon: {
+        width: 30
     }
 })

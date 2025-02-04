@@ -1,16 +1,15 @@
 import ThemedSafeAreaView from "@/components/ThemedSafeAreaView";
-import { Button, Image, Modal, Text, TouchableOpacity, useColorScheme, View } from "react-native";
+import { Image as Img, Modal, Text, TouchableOpacity, useColorScheme, View } from "react-native";
 import { styles } from "./CreateStore.style";
 import GoBackButton from "@/components/GoBackButton";
 import { ThemedText } from "@/components/ThemedText";
 import { useNavigation } from "@react-navigation/native";
 import { useCreateStoreImage } from "../../store";
-import { checkValidImageType } from "../../utils";
-import { useRef, useState } from "react";
-import BottomSheet, { BottomSheetView, BottomSheetModal, BottomSheetModalProvider } from '@gorhom/bottom-sheet';
-import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { FullWindowOverlay } from "react-native-screens";
-import CustomModal from "@/components/CustomModal";
+import { useEffect, useRef, useState } from "react";
+import { BottomSheetView, BottomSheetModal, BottomSheetModalProvider } from '@gorhom/bottom-sheet';
+import BottomSheet from "@/components/BottomSheet";
+import Camera from "@/components/svgs/Camera";
+import Image from "@/components/svgs/Image";
 
 export default function CreateStoreTwo() {
     const [image, setImage] = useCreateStoreImage();
@@ -39,7 +38,7 @@ export default function CreateStoreTwo() {
             <View style={styles.body}>
                 <View style={styles.storeImageContainer}>
                     {image ? 
-                        <Image source={{uri: URL.createObjectURL(image)}} style={styles.selectedImageView} />
+                        <Img source={{uri: URL.createObjectURL(image)}} style={styles.selectedImageView} />
                     :
                         <View style={[styles.notSelectedImageView, isDark ? {backgroundColor: "#262626"} : {backgroundColor: "#f2f2f2"}]}>
                         </View>
@@ -60,11 +59,32 @@ export default function CreateStoreTwo() {
                     </TouchableOpacity>
                 </View>
             </View>
-            <CustomModal visible={imageOptionModal} handleClose={() => setImageOptionModal(false)}>
+            <BottomSheet 
+                visible={imageOptionModal} 
+                handleClose={() => setImageOptionModal(false)} 
+                snapPoints={['25%']}
+                backgroundStyle={{backgroundColor: isDark ? "#262626" : "#f2f2f2"}}
+                handleIndicatorStyle={{backgroundColor: isDark ? "white" : "gray"}}
+            >
                 <BottomSheetView>
-                    <Text>Test</Text>
+                    <TouchableOpacity style={styles.selectImageOption} onPress={() => {}}>
+                        <View style={styles.selectImageOptionIcon}>
+                            <Image width={24} color={isDark ? "white" : "black"} />
+                        </View>
+                        <ThemedText type="default" weight="300">
+                            Choose from gallery
+                        </ThemedText>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.selectImageOption} onPress={() => {}}>
+                        <View style={styles.selectImageOptionIcon}>
+                            <Camera width={24} color={isDark ? "white" : "black"} />
+                        </View>
+                        <ThemedText type="default" weight="300">
+                            Take a photo
+                        </ThemedText>
+                    </TouchableOpacity>
                 </BottomSheetView>
-            </CustomModal>
+            </BottomSheet>
         </ThemedSafeAreaView>
     )
 }

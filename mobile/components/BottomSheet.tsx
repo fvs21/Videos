@@ -1,4 +1,4 @@
-import BottomSheet, { BottomSheetBackdrop, BottomSheetModal, BottomSheetModalProvider, BottomSheetView } from "@gorhom/bottom-sheet";
+import { default as BS, BottomSheetBackdrop, BottomSheetModal, BottomSheetModalProvider, BottomSheetView } from "@gorhom/bottom-sheet";
 import React, { useCallback, useEffect, useRef } from "react";
 import { StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -9,10 +9,12 @@ type CustomModalProps = {
     style?: Object | Object[];
     visible: boolean;
     handleClose: () => void;
+    snapPoints: (number | `${number}%`)[];
+    [key: string]: any;
 }
 
-export default function CustomModal({children, style, visible, handleClose}: CustomModalProps) {
-    const bottomSheetRef = useRef<BottomSheet>(null);
+export default function BottomSheet({children, style, visible, handleClose, snapPoints, ...props}: CustomModalProps) {
+    const bottomSheetRef = useRef<BS>(null);
 
     const renderBackdrop = useCallback((props: any) => 
         <BottomSheetBackdrop {...props} appearsOnIndex={0} disappearsOnIndex={-1} />, []);
@@ -28,18 +30,17 @@ export default function CustomModal({children, style, visible, handleClose}: Cus
     return (
         <FullWindowOverlay>
             <GestureHandlerRootView style={{flex: 1, justifyContent: "center"}}>
-                <BottomSheet
+                <BS
                     ref={bottomSheetRef}
                     index={-1}
-                    snapPoints={['40%']}
+                    snapPoints={snapPoints}
                     enablePanDownToClose={true}
                     backdropComponent={renderBackdrop}
                     onClose={handleClose}
+                    {...props}
                 >
-                    <BottomSheetView>
-                        <Text>Test</Text>
-                    </BottomSheetView>
-                </BottomSheet>
+                    {children}
+                </BS>
             </GestureHandlerRootView>
         </FullWindowOverlay>
     )
