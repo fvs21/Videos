@@ -1,21 +1,14 @@
 import { hasAndroidPhotosPermission } from "@/utils";
-import { useLayoutEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { Image, Platform, StyleSheet, View } from "react-native";
+import * as ImagePicker from 'expo-image-picker';
 
-export default function CroppableImageSelector() {
-    const [photos, setPhotos] = useState();
+type CroppableImageSelectorProps = {
+    image: ImagePicker.ImagePickerAsset;
+    setImage: (image: ImagePicker.ImagePickerAsset) => void;
+}
 
-    useLayoutEffect(() => {
-        async function load() {
-            if(Platform.OS === 'android' && !(await hasAndroidPhotosPermission())) {
-                return;
-            }
-
-        }
-
-        load();
-    }, []);
-
+export default function CroppableImageSelector({ image, setImage }: CroppableImageSelectorProps) {
     return (
         <View style={styles.mainContainer}>
             <View style={styles.imageViewerContainer}> 

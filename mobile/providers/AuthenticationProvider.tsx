@@ -12,7 +12,7 @@ export default function AuthenticationProvider({ children }: { children: React.R
             try {
                 const token = await SecureStore.getItemAsync('user_r');
                 
-                if (token) {
+                if(token) {
                     await refreshToken(token);
                 }
             } catch (error) {
@@ -51,7 +51,9 @@ export default function AuthenticationProvider({ children }: { children: React.R
             (response) => response,
             async (error) => {
                 const originalRequest = error.config;
-                if (error.response.status === 401 && error.response.data.message === 'Unauthorized') {
+                console.log(error.response);
+                                
+                if (error.response.status === 401 && error.response.data.code === 'token_not_valid') {
                     try {
                         const refresh_token = await SecureStore.getItemAsync('user_r');
 

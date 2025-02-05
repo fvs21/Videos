@@ -1,16 +1,43 @@
-import { useMutation } from "@tanstack/react-query"
-import { CreateStoreRequest } from "../types"
-import { apiMultipart } from "@/api"
+import { useMutation, useQuery } from "@tanstack/react-query"
+import { CreateStoreRequest, Store } from "../types"
+import { api, apiMultipart } from "@/api"
+import { useUser } from "@/store"
 
-export const useGetStore = () => {
-    
+export const useGetUserStore = () => {
+    const { data, isLoading, error } = useQuery({
+        queryFn: async (): Promise<Store> => {
+            const request = await api.get<Store>("/store/get");
+            
+            return request.data;
+        },
+        queryKey: ['user-store']
+    });
+
+    return {
+        data,
+        isLoading,
+        error
+    }
 }
 
 export const useCreateStore = () => {
+    const [user, setUser] = useUser();
+
     const { mutateAsync: create, isPending, isError } = useMutation({
         mutationFn: async (body: CreateStoreRequest) => {
+            const formData = new FormData();
+
+            formData.append("name", body.name as any); //doesnt matter if its null
+            formData.append("store_image", body.image as any);
+            
             const request = await apiMultipart.post("/store/create", body);
             return request.data;
+        },
+        onSuccess: () => {
+            setUser({
+                ...user,
+                is_seller: true
+            });
         }
     });
 

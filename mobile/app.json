@@ -11,7 +11,7 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.anonymous.mobile",
+      "bundleIdentifier": "com.dres.mobile",
       "infoPlist": {
         "NSPhotoLibraryUsageDescription": "This app requires access to the photo library to upload images.",
         "NSPhotoLibraryAddUsageDescription": "This app requires access to the photo library to upload images.",
@@ -27,8 +27,13 @@
         "android.permission.READ_MEDIA_IMAGES",
         "android.permission.READ_MEDIA_VIDEO",
         "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.READ_MEDIA_IMAGES",
+        "android.permission.READ_MEDIA_VIDEO",
+        "android.permission.READ_EXTERNAL_STORAGE",
         "android.permission.WRITE_EXTERNAL_STORAGE"
-      ]
+      ],
+      "package": "com.anonymous.mobile"
     },
     "web": {
       "bundler": "metro",
@@ -66,7 +71,13 @@
           "faceIdPermission": "Allow $(PRODUCT_NAME) to use Face ID"
         }
       ],
-      "expo-video"
+      "expo-video",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "The app access to your photos to upload images."
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true

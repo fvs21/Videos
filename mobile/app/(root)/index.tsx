@@ -6,6 +6,7 @@ import { Link, router } from 'expo-router';
 import { ThemedText } from '@/components/ThemedText';
 import AuthenticationInput from '@/components/AuthenticationInput';
 import { useNavigation } from '@react-navigation/native';
+import { useLogin } from '@/api/hooks/auth';
 
 export default function Index() {
   const theme = useColorScheme() ?? 'light';
@@ -15,6 +16,18 @@ export default function Index() {
   const [password, setPassword] = useState('');
 
   const navigation = useNavigation<any>();
+
+  const { login, isPending, loginDisabled } = useLogin();
+
+  async function handleSubmit() {
+    if(loginDisabled) return;
+
+    try {
+      await login({ credential, password });
+    } catch(error) {
+      console.log(error);
+    }
+  }
 
   return (
     <SafeAreaView style={[styles.indexContainer, isDark ? styles.darkMain : styles.lightMain]}>
@@ -42,7 +55,7 @@ export default function Index() {
           keyboardType='default'
           textContentType='password' 
         />
-        <TouchableOpacity style={styles.loginButton}>
+        <TouchableOpacity style={styles.loginButton} onPress={handleSubmit}>
           <Text style={styles.loginButtonText}>Log in</Text>
         </TouchableOpacity>
         <Link href={'/forgot-password'} style={styles.forgotButton}>

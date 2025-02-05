@@ -26,7 +26,7 @@ export default function RouteProviders() {
         return <View></View>
     }
 
-    if(!user && false) {
+    if(!user) {
         return (
             <Stack.Navigator screenOptions={{ headerShown: false }}>
                 <Stack.Screen name="Index" component={Index} />
@@ -35,7 +35,7 @@ export default function RouteProviders() {
         )
     }
 
-    if(!user?.has_email_verified && false) {
+    if(!user?.has_email_verified) {
         return (
             <Stack.Navigator screenOptions={{ headerShown: false }}>
                 <Stack.Screen name="verify-email" component={VerifyEmail} />

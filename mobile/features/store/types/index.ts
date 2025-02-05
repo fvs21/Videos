@@ -1,10 +1,11 @@
 export type Store = {
     id: string;
     name: string;
-    store_image: string;
+    store_picture_url: string;
     owner_username: string;
-    owner_name: string;
+    owner_full_name: string;
     owner_pfp_url: string;
+    products: ProductDisplay[];
 }
 
 export type ProductDisplay = {

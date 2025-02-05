@@ -4,7 +4,7 @@ import { Text, TouchableOpacity, View } from "react-native";
 import { styles } from "./CreateStore.style";
 import { ThemedText } from "@/components/ThemedText";
 import ThemedTextInput from "@/components/ThemedTextInput";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { useCreateStoreName } from "../../store";
 
@@ -14,7 +14,7 @@ export default function CreateStoreOne() {
     const navigation = useNavigation<any>();
 
     return (
-        <ThemedSafeAreaView>  
+        <Fragment>  
             <View style={styles.header}>
                 <GoBackButton />
                 <View style={styles.title}>
@@ -38,6 +38,6 @@ export default function CreateStoreOne() {
                     </TouchableOpacity>
                 </View>
             </View>
-        </ThemedSafeAreaView>
+        </Fragment>
     )
 }

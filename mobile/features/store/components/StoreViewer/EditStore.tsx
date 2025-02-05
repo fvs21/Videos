@@ -11,20 +11,14 @@ import { Fragment, useState } from "react";
 import GoBackButton from "@/components/GoBackButton";
 import XLg from "@/components/svgs/XLg";
 import { Colors } from "@/styles/variables";
+import { useGetUserStore } from "../../api";
 
 export default function EditStore({setEditMode}: {setEditMode: (value: boolean) => void}) {
     const isDark = useColorScheme() === "dark";
 
     const [createProductModal, setCreateProductModal] = useState(false);
 
-    const store: Store = {
-        id: "1",
-        name: "Cock n' Balls",
-        store_image: "https://picsum.photos/200/300",
-        owner_username: "testuser",
-        owner_name: "fabriziovanzani",
-        owner_pfp_url: "https://picsum.photos/200/300"
-    }
+    const { data, isLoading } = useGetUserStore();
 
     const products: PD[] = [
         {
@@ -79,28 +73,25 @@ export default function EditStore({setEditMode}: {setEditMode: (value: boolean) 
                 <View style={styles.storeBody}>
                     <View style={styles.storeInfoContainer}>
                         <TouchableOpacity style={styles.editableStoreImage}>
-                            <Image source={{ uri: store.store_image }} style={styles.storeImage} />
+                            <Image source={{ uri: data?.store_picture_url || "https://picsum.photos/200/300" }} style={styles.storeImage} />
                             <View style={styles.editableStoreImageOverlay}>
                                 <PencilFill width={20} color={"white"}/>
                             </View>
                         </TouchableOpacity>
                         <View style={styles.storeTextContainer}>
-                            <View style={styles.editableStoreName}>
+                            <TouchableOpacity style={[styles.editableStoreName, {borderColor: isDark ? Colors.dark.border : Colors.light.border}]}>
                                 <ThemedText type="title" weight="300" style={styles.storeName}>
-                                    {store.name}
+                                    {data?.name}
                                 </ThemedText>
-                                <TouchableOpacity>
-                                    <PencilFill width={20} color={isDark ? "white" : "black"} />
-                                </TouchableOpacity>
-                            </View>
+                            </TouchableOpacity>
                             <View>
                                 <ThemedText type="default" weight="300">
                                     Owned by
                                 </ThemedText>
                                 <View style={styles.storeOwnerInformation}>
-                                    <Image source={{ uri: store.owner_pfp_url }} style={styles.storeOwnerPfp} />
+                                    <Image source={{ uri: data?.owner_pfp_url }} style={styles.storeOwnerPfp} />
                                     <ThemedText type="default" weight="300">
-                                        {store.owner_name}
+                                        {data?.owner_full_name || data?.owner_username}
                                     </ThemedText>
                                 </View>
                             </View>

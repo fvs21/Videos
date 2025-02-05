@@ -14,10 +14,13 @@ export const styles = StyleSheet.create({
     },
     storeBody: {
         padding: 20,
+        width: "100%",
+        height: "auto",
+        flex: 1
     },
     storeInfoContainer: {
         flexDirection: "row",
-        gap: 30
+        gap: 30,
     },
     storeImage: {
         width: 100,
@@ -29,7 +32,7 @@ export const styles = StyleSheet.create({
         gap: 10
     },
     storeName: {
-        fontSize: 28,
+        fontSize: 20,
     },
     storeOwnerInformation: {
         flexDirection: "row",
@@ -44,6 +47,7 @@ export const styles = StyleSheet.create({
     },
     productsContainer: {
         padding: 14,
+        flex: 1,  // added flex: 1 to allow vertical centering
     },
     productsList: {
         flexWrap: "wrap",
@@ -52,10 +56,9 @@ export const styles = StyleSheet.create({
         flexDirection: "row",
     },
     editableStoreName: {
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "space-between",
-        gap: 10,
+        borderWidth: 1,
+        paddingHorizontal: 6,
+        borderRadius: 10
     },
     editableStoreImage: {
         position: "relative",
@@ -99,5 +102,11 @@ export const styles = StyleSheet.create({
         padding: 20,
         justifyContent: "space-between",
         flexDirection: "row",
+    },
+    emptyStore: {
+        width: "100%",
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
     }
 })
