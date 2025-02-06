@@ -25,12 +25,12 @@ export default function Home() {
 
     const videos = [
         {
-            url: "http://192.168.68.102:8000/api/video/playlist/60/v0/playlist.m3u8",
+            url: "http://192.168.68.103:8000/api/video/playlist/60/v0/playlist.m3u8",
             description: "This is a test video",
             id: 1,
         },
         {
-            url: "http://192.168.68.102:8000/api/video/playlist/61/v0/playlist.m3u8",
+            url: "http://192.168.68.103:8000/api/video/playlist/61/v0/playlist.m3u8",
             description: "This is a test video 2",
             id: 2,
         },

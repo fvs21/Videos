@@ -99,14 +99,24 @@ export const styles = StyleSheet.create({
         elevation: 5,
     },
     modalHeader: {
-        padding: 20,
+        paddingHorizontal: 20,
+        paddingVertical: 10,
         justifyContent: "space-between",
         flexDirection: "row",
+        position: "relative",
+        alignItems: "center",
+        width: "100%"
     },
     emptyStore: {
         width: "100%",
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
+    },
+    modalTitle: {
+        fontSize: 20,
+        position: "absolute",
+        left: "50%",
+        transform: [{ translateX: -50 }],
     }
 })

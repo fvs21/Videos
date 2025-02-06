@@ -12,6 +12,8 @@ import GoBackButton from "@/components/GoBackButton";
 import XLg from "@/components/svgs/XLg";
 import { Colors } from "@/styles/variables";
 import { useGetUserStore } from "../../api";
+import ThemedSafeAreaView from "@/components/ThemedSafeAreaView";
+import CreateProduct from "../CreateProduct";
 
 export default function EditStore({setEditMode}: {setEditMode: (value: boolean) => void}) {
     const isDark = useColorScheme() === "dark";
@@ -20,44 +22,8 @@ export default function EditStore({setEditMode}: {setEditMode: (value: boolean) 
 
     const { data, isLoading } = useGetUserStore();
 
-    const products: PD[] = [
-        {
-            id: "1",
-            name: "Product 1 fdsanfjkdlsanfjdsaln dbsahjdb sahdbsahufkbdsah",
-            price: 100,
-            product_image: "https://img.kwcdn.com/product/fancy/market/5107d6f0859767b6350d6e1bfce05e0b_20xV8yDwi9xvh.jpg?imageView2/2/w/800/q/70/format/webp"
-        },
-        {
-            id: "2",
-            name: "Product 2",
-            price: 200,
-            product_image: "https://img.kwcdn.com/product/fancy/a34a45ca-56f5-4c9e-9636-a0d3ac11808f.jpg?imageView2/2/w/800/q/70/format/webp"
-        },
-        {
-            id: "3",
-            name: "Product 3",
-            price: 300,
-            product_image: "https://img.kwcdn.com/product/fancy/4e131408-f81f-40a4-ae23-815be0836ea4.jpg?imageView2/2/w/800/q/70/format/webp"
-        },
-        {
-            id: "4",
-            name: "Product 4",
-            price: 400,
-            product_image: "https://img.kwcdn.com/product/fancy/ce1454c4-92c1-4e85-8269-b8245053b09f.jpg?imageView2/2/w/800/q/70/format/webp"
-        },
-        {
-            id: "5",
-            name: "Product 5",
-            price: 500,
-            product_image: "https://img.kwcdn.com/product/fancy/eea1b227-b3f3-4b43-874c-1391e586c0e5.jpg?imageView2/2/w/800/q/70/format/webp"
-        },
-        {
-            id: "6",
-            name: "Product 6",
-            price: 600,
-            product_image: "https://picsum.photos/200/300"
-        }
-    ]
+    if(isLoading)
+        return <View></View>
     
     return (
         <Fragment>
@@ -100,7 +66,7 @@ export default function EditStore({setEditMode}: {setEditMode: (value: boolean) 
                 </View>
                 <View style={styles.productsContainer}>
                     <FlatList
-                        data={products}
+                        data={data?.products}
                         renderItem={({ item }) => <ProductDisplay product={item} />}
                         keyExtractor={(item) => item.id}
                         contentContainerStyle={styles.productsList}
@@ -119,16 +85,19 @@ export default function EditStore({setEditMode}: {setEditMode: (value: boolean) 
                 animationType="slide"
                 transparent={false}
                 visible={createProductModal}
-                presentationStyle="pageSheet"
                 onRequestClose={() => setCreateProductModal(false)}
             >
-                <View style={{flex: 1, backgroundColor: isDark ? Colors.dark.background : Colors.light.background}}>
+                <ThemedSafeAreaView style={{flex: 1, backgroundColor: isDark ? Colors.dark.background : Colors.light.background}}>
                     <View style={styles.modalHeader}>
                         <TouchableOpacity onPress={() => setCreateProductModal(false)}>
                             <XLg width={24} color={isDark ? "white" : "black"} />
                         </TouchableOpacity>
+                        <ThemedText type="title" weight="300" style={styles.modalTitle}>
+                            Add a product
+                        </ThemedText>
                     </View>
-                </View>
+                    <CreateProduct />
+                </ThemedSafeAreaView>
             </Modal>
         </Fragment>
     )

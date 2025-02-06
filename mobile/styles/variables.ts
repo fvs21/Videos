@@ -18,7 +18,7 @@ export const Colors = {
         icon: "#687076",
         tabIconDefault: "#687076",
         tabIconSelected: "#0a7ea4",
-        inputColor: "white",
+        inputColor: "#e0e0e0",
         inputTextColor: "#7d7d7d",
         border: "#d6d6d6",
     },
@@ -33,7 +33,7 @@ export const Colors = {
         white100: "#ECEDEE",
         white200: "#F7F8FA",
         white300: "#F7F8FA",
-        inputColor: "transparent",
+        inputColor: "#1f1f1f",
         inputTextColor: "#949494",
         border: "#3E3E3E",
     }
