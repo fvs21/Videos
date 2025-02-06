@@ -74,6 +74,7 @@ class User(AbstractBaseUser):
         if self.profile_picture is None:
             return "/api/image/default-pfp.jpg"
         return self.profile_picture.image_url
+        
 
     def set_password_reset_token(self, token: str) -> None: #hashed token
         self.password_reset_token = token

@@ -16,3 +16,7 @@ class Image(models.Model):
     image_type = models.CharField(max_length=100)
     image_url = models.CharField(max_length=100, unique=True)
     container = models.CharField(max_length=20)
+
+    def delete(self, *args, **kwargs):
+        self.image.delete()
+        super(Image, self).delete(*args, **kwargs)

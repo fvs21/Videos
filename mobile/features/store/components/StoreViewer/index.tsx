@@ -1,7 +1,6 @@
 import { Animated, FlatList, Image, ScrollView, TouchableOpacity, useColorScheme, View } from "react-native";
 import { styles } from "./StoreViewer.style";
 import GoBackButton from "@/components/GoBackButton";
-import { ProductDisplay as PD, Store } from "../../types";
 import { ThemedText } from "@/components/ThemedText";
 import ProductDisplay from "../ProductDisplay";
 import PencilFill from "@/components/svgs/PencilFill";

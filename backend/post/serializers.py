@@ -2,10 +2,13 @@ from rest_framework import serializers
 from post.models import Post
 from django.core.files.uploadedfile import UploadedFile
 
+from store.models import Product
+from store.serializers import ProductSerializer
 from video.service import store_video
 
 class CreatePostSerializer(serializers.ModelSerializer):
     video_file = serializers.FileField()
+    products = serializers.ListField(child=serializers.IntegerField())
 
     class Meta:
         model = Post
@@ -14,6 +17,21 @@ class CreatePostSerializer(serializers.ModelSerializer):
             "creator",
             "products"
         ]
+
+    def validate_products(self, value: list) -> list:
+        for product_id in value:
+            product = Product.objects.filter(id=product_id).first()
+
+            if not product:
+                raise serializers.ValidationError(f"Product with id {product_id} does not exist")
+            
+            creator = self.creator
+
+            if not product.store.creator == creator:
+                raise serializers.ValidationError(f"Product with id {product_id} does not belong to the creator")
+            
+
+        return value
 
     def validate_video_file(self, value: UploadedFile):
         if not value.content_type in ['mp4', 'mov']:
@@ -31,6 +49,8 @@ class CreatePostSerializer(serializers.ModelSerializer):
         return post
     
 class PostSerializer(serializers.ModelSerializer):
+    products = ProductSerializer(many=True)
+    
     class Meta:
         model = Post
         fields = [
@@ -38,5 +58,6 @@ class PostSerializer(serializers.ModelSerializer):
             "video",
             "creator",
             "likes",
-            "created_at"
+            "created_at",
+            'products'
         ]

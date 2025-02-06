@@ -24,9 +24,17 @@ class Post(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     creator = models.ForeignKey(User, on_delete=models.CASCADE)
     likes = models.BigIntegerField(default=0)
+    comment_count = models.BigIntegerField(default=0)
     #url = models.URLField(name="post_url")
     video = models.ForeignKey(Video, on_delete=models.CASCADE)
-    products = models.ManyToManyField(Product, blank=True)
+    products = models.ManyToManyField(Product, related_name="posts")
+    views = models.BigIntegerField(default=0)
+
+    def trending_score(self) -> float:
+        '''
+        basic implementation of trending score for recomending posts to users
+        '''
+        return (self.likes * 2) + (self.comment_count * 1.5) + self.views
 
 class Comment(models.Model):
     creator = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -36,6 +44,12 @@ class Comment(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
 class Like(models.Model):
-    creator = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+class View(models.Model):
+    viewer = models.ForeignKey(User, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    times_watched = models.BigIntegerField(default=1)
     created_at = models.DateTimeField(auto_now_add=True)

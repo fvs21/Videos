@@ -1,14 +1,12 @@
 from django.http import HttpRequest
-from authentication.service import get_user_by_id
 from post.models import Post
 from post.serializers import CreatePostSerializer
-import json
+from user.models import User
+from video.models import Video
+from django.core.files.uploadedfile import UploadedFile
 
-def create_post(request: HttpRequest) -> Post:
-    user = get_user_by_id(request.user.id)
-
-    json_data = json.loads(request.data['data'])
-    
-    serializer = CreatePostSerializer(data={**json_data, "creator": user.id, "video_file": request.FILES.get("video")})
+def create_post(user: User, json_data: dict, video: UploadedFile) -> Post:    
+    serializer = CreatePostSerializer(data={**json_data, "creator": user.id, "video_file": video})
     serializer.is_valid(raise_exception=True)
     return serializer.save()
+

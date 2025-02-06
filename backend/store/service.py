@@ -1,6 +1,7 @@
-from store.exceptions import UnableToCreateProductException
+from image.service import upload_image
+from store.exceptions import StoreDoestNotExist, UnableToCreateProductException, UnableToEditStore
 from store.models import Product, Store
-from store.serializers import CreateProductSerializer, CreateStoreSerializer
+from store.serializers import CreateProductSerializer, CreateStoreSerializer, StoreSerializer
 from user.models import User
 from django.core.files.uploadedfile import UploadedFile
 
@@ -11,14 +12,10 @@ def create_store(user: User, json_data: dict, image: UploadedFile) -> Store:
     return serializer.save()
 
 def create_product(user: User, json_data: dict, images: list[UploadedFile]) -> Product:
-    store_id: int = json_data.get('store')
-    store = Store.objects.filter(id=store_id).first()
+    store = get_user_store(user)
     
     if not store:
-        raise UnableToCreateProductException('Store not found', 404)
-
-    if store.owner != user:
-        raise UnableToCreateProductException('You are not authorized to create a product for this store', 403)
+        raise UnableToCreateProductException('User has not created a store.', 404)
 
     serializer = CreateProductSerializer(data={**json_data, "images": images})
     
@@ -26,3 +23,36 @@ def create_product(user: User, json_data: dict, images: list[UploadedFile]) -> P
         raise UnableToCreateProductException(serializer.errors, 400)
     
     return serializer.save()
+
+def get_user_store(user: User) -> Store:
+    return Store.objects.filter(owner=user).first()
+
+def edit_store_name(user: User, new_name: str) -> Store:
+    store = get_user_store(user)
+
+    if not store:
+        raise StoreDoestNotExist('User doesn\'t have a store', 404)
+    
+    store.name = new_name
+    store.save()
+    return store
+
+def edit_store_picture(user: User, new_picture: UploadedFile) -> Store:
+    store = get_user_store(user)
+
+    if not store:
+        raise StoreDoestNotExist('User doesn\'t have a store', 404)
+    
+    picture = upload_image(new_picture)
+
+    if picture is None:
+        raise UnableToEditStore('Unable to upload image', 500)
+
+    store.set_store_picture(picture)
+    return store
+
+def get_store_by_id(store_id: int) -> Store:
+    return Store.objects.filter(id=store_id).first()
+
+def get_product_by_id(product_id: int) -> Product:
+    return Product.objects.filter(id=product_id).first()
