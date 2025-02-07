@@ -19,7 +19,7 @@ export const styles = StyleSheet.create({
         gap: 6
     },
     inputFieldContainer: {
-        marginTop: 20,
+        marginTop: 10,
         width: "100%",
     },
     inputField: {

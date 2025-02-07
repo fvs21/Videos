@@ -34,10 +34,12 @@ const styles = StyleSheet.create({
         borderWidth: 1,
     },
     inputDark: {
-        borderColor: Colors.dark.border
+        borderColor: Colors.dark.border,
+        color: Colors.dark.white
     },
     inputLight: {
-        borderColor: Colors.light.border
+        borderColor: Colors.light.border,
+        color: Colors.light.black
     },
     label: {
         fontSize: 14,

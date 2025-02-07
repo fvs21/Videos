@@ -24,7 +24,7 @@ export const useUser = (): [User, (user: User) => void] => {
         },
         setUser
     ]
-    */
+        */
     
     return [
         queryClient.getQueryData(['user']) as User,

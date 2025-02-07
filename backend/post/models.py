@@ -25,7 +25,6 @@ class Post(models.Model):
     creator = models.ForeignKey(User, on_delete=models.CASCADE)
     likes = models.BigIntegerField(default=0)
     comment_count = models.BigIntegerField(default=0)
-    #url = models.URLField(name="post_url")
     video = models.ForeignKey(Video, on_delete=models.CASCADE)
     products = models.ManyToManyField(Product, related_name="posts")
     views = models.BigIntegerField(default=0)

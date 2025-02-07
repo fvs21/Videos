@@ -17,7 +17,7 @@ def create_product(user: User, json_data: dict, images: list[UploadedFile]) -> P
     if not store:
         raise UnableToCreateProductException('User has not created a store.', 404)
 
-    serializer = CreateProductSerializer(data={**json_data, "images": images})
+    serializer = CreateProductSerializer(data={**json_data, "images": images, "store": store.id})
     
     if not serializer.is_valid():
         raise UnableToCreateProductException(serializer.errors, 400)

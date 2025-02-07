@@ -3,16 +3,34 @@ import { styles } from "./CreateProduct.style";
 import { Colors } from "@/styles/variables";
 import { useState } from "react";
 import Images from "@/components/svgs/Images";
-import ThemedTextInput from "@/components/ThemedTextInput";
 import LabeledInput from "@/components/LabeledInput";
+import ImageOptionChooser from "../CreateStore/ImageOptionChooser";
+import * as ImagePicker from 'expo-image-picker';
 
 export default function CreateProduct() {
     const isDark = useColorScheme() === "dark";
+
+    const [imageOptionModal, setImageOptionModal] = useState<boolean>(false);
 
     const [images, setImages] = useState<string[]>([]);
     const [name, setName] = useState<string>("");
     const [price, setPrice] = useState<string>("");
     const [description, setDescription] = useState<string>("");
+
+    const pickImage = async () => {
+        setImageOptionModal(false);
+
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ['images'],
+            quality: 1,
+            allowsMultipleSelection: true,
+            selectionLimit: 5
+        });
+
+        if(!result.canceled) {
+            setImages([...images, result.assets[0].uri]);
+        }
+    }
     
     return (
         <ScrollView 
@@ -23,7 +41,7 @@ export default function CreateProduct() {
                 borderColor: isDark ? Colors.dark.border : Colors.light.border
              }]}>
                 {images.length === 0 ? (
-                    <TouchableOpacity style={styles.addImagesIcon}>
+                    <TouchableOpacity style={styles.addImagesIcon} onPress={() => setImageOptionModal(true)}>
                         <Images width={30} color={isDark ? Colors.dark.inputTextColor : Colors.light.inputTextColor} />
                         <Text style={{ 
                             color: isDark ? Colors.dark.inputTextColor : Colors.light.inputTextColor, 
@@ -69,6 +87,12 @@ export default function CreateProduct() {
                     numberOfLines={4}
                 />
             </View>
+            <ImageOptionChooser
+                imageOptionModal={imageOptionModal}
+                setImageOptionModal={setImageOptionModal}
+                onPressCamera={() => {}}
+                onPressGallery={pickImage}
+            />
         </ScrollView>
     )
 }

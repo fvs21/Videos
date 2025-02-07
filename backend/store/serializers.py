@@ -1,5 +1,3 @@
-from hmac import new
-import re
 from rest_framework import serializers
 from django.core.files.uploadedfile import UploadedFile
 from store.models import Product, Store
@@ -67,21 +65,30 @@ class CreateProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = ["name", "description", "price", "store", "images"]
+        fields = [
+            "name", 
+            "description", 
+            "price", 
+            "store", 
+            "images"
+        ]
 
     def create(self, validated_data):
         image_objects = [
-            upload_image(img) for img in validated_data.get('images')
+            upload_image(img, 'products') for img in validated_data.get('images')
         ]
 
-        product = Product.objects.create(
+        product = Product(
             name=validated_data.get('name'),
             description=validated_data.get('description'),
             price=validated_data.get('price'),
-            store=validated_data.get('store'),
-            images=image_objects
+            store=validated_data.get('store')
         )
 
+        product.save()
+
+        product.images.add(*image_objects)
+        
         return product
     
 class ProductSerializer(serializers.ModelSerializer):

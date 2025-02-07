@@ -36,6 +36,8 @@ class AuthenticatedStoreViewSet(viewsets.ViewSet):
             images.append(request.FILES.get('images3'))
         if request.FILES.get('images4'):
             images.append(request.FILES.get('images4'))
+        if request.FILES.get('images5'):
+            images.append(request.FILES.get('images5'))
 
         product: Product = service.create_product(user, json_data, images)
         return JsonResponse(ProductSerializer(product).data, status=201)
