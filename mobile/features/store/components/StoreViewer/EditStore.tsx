@@ -63,17 +63,17 @@ export default function EditStore({setEditMode}: {setEditMode: (value: boolean) 
                             </View>
                         </View>
                     </View>
-                </View>
-                <View style={styles.productsContainer}>
-                    <FlatList
-                        data={data?.products}
-                        renderItem={({ item }) => <ProductDisplay product={item} />}
-                        keyExtractor={(item) => item.id}
-                        contentContainerStyle={styles.productsList}
-                        numColumns={2}
-                        columnWrapperStyle={{ width: "100%", justifyContent: "space-between", gap: 20 }}
-                        scrollEnabled={false}
-                    />
+                    <View style={styles.productsContainer}>
+                        <FlatList
+                            data={data?.products}
+                            renderItem={({ item }) => <ProductDisplay product={item} />}
+                            keyExtractor={(item) => item.id}
+                            contentContainerStyle={styles.productsList}
+                            numColumns={2}
+                            columnWrapperStyle={{ width: "100%", justifyContent: "space-between", gap: 20 }}
+                            scrollEnabled={false}
+                        />
+                    </View>
                 </View>
             </ScrollView>
             <View style={styles.editableStoreFooter}>

@@ -78,16 +78,14 @@ class CreateProductSerializer(serializers.ModelSerializer):
             upload_image(img, 'products') for img in validated_data.get('images')
         ]
 
-        product = Product(
+        product = Product.objects.create(
             name=validated_data.get('name'),
             description=validated_data.get('description'),
             price=validated_data.get('price'),
             store=validated_data.get('store')
         )
 
-        product.save()
-
-        product.images.add(*image_objects)
+        product.images.set(image_objects)
         
         return product
     

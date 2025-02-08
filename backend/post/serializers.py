@@ -1,10 +1,13 @@
+from math import prod
+from webbrowser import get
 from rest_framework import serializers
-from post.models import Post
+from post.models import Comment, Post
 from django.core.files.uploadedfile import UploadedFile
 
 from store.models import Product
 from store.serializers import ProductSerializer
 from video.service import store_video
+from .utils import get_video_duration
 
 class CreatePostSerializer(serializers.ModelSerializer):
     video_file = serializers.FileField()
@@ -15,7 +18,8 @@ class CreatePostSerializer(serializers.ModelSerializer):
         fields = [
             "description",
             "creator",
-            "products"
+            "products",
+            "video_file"
         ]
 
     def validate_products(self, value: list) -> list:
@@ -25,17 +29,23 @@ class CreatePostSerializer(serializers.ModelSerializer):
             if not product:
                 raise serializers.ValidationError(f"Product with id {product_id} does not exist")
             
-            creator = self.creator
+            creator = self.initial_data.get("creator")
 
-            if not product.store.creator == creator:
+            if not product.store.owner.id == creator:
                 raise serializers.ValidationError(f"Product with id {product_id} does not belong to the creator")
             
 
         return value
 
     def validate_video_file(self, value: UploadedFile):
-        if not value.content_type in ['mp4', 'mov']:
+        if not value.content_type in ['video/mp4', 'video/mov']:
             raise serializers.ValidationError("Unsupported video file type")
+
+        duration = get_video_duration(value.file.name)
+
+        if duration > 60000:
+            raise serializers.ValidationError("Video duration is more than 1 minute")    
+        
         return value
 
     def create(self, validated_data: dict) -> Post:
@@ -46,6 +56,10 @@ class CreatePostSerializer(serializers.ModelSerializer):
             video=video,
             creator=validated_data.get("creator")
         )
+
+        post.products.set(validated_data.get("products"))
+        post.save()
+
         return post
     
 class PostSerializer(serializers.ModelSerializer):
@@ -54,10 +68,22 @@ class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = [
+            "id",
             "description",
             "video",
             "creator",
             "likes",
             "created_at",
             'products'
+        ]
+
+class CommentSerializer(serializers.ModelSerializer): 
+    class Meta:
+        model = Comment
+        fields = [
+            'id',
+            'comment',
+            'creator',
+            'likes',
+            'created_at'
         ]

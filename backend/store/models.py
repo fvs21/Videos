@@ -39,14 +39,11 @@ class Product(models.Model):
     images = models.ManyToManyField(Image)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
-    def save(self, *args, **kwargs):
-        if Product.objects.filter(images=self.images).exists():
-            raise Exception('Image already used')
-        return super(Product, self).save(*args, **kwargs)
     
     def images_urls(self) -> list:
-        return [image.image_url for image in self.images.all()]
+        return [
+            f"http://192.168.68.100:8000{image.image_url}" for image in self.images.all()
+        ]
 
     def __str__(self) -> str:
         return f"{self.name} - {self.store.name}"

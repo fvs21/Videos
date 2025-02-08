@@ -7,7 +7,7 @@ export default function ProductDisplay({ product }: { product: PD }) {
     return (
         <TouchableOpacity style={styles.productContainer}>
             <Image 
-                source={{ uri: product.product_image }} 
+                source={{ uri: product.images_urls[0] }} 
                 style={styles.productImage} 
             />
             <View style={styles.productTextContainer}>

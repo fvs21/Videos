@@ -17,7 +17,7 @@ def store_video(file: UploadedFile) -> Video:
     begin the processing of the video
     '''
 
-    if not file.content_type in ['mp4', 'mov']:
+    if not file.content_type in ['video/mp4', 'video/mov']:
         raise UnableToUploadVideoException("Unsupported video file type", 400)
 
     video_name = generate_video_name(file)

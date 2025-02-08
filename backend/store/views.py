@@ -1,7 +1,7 @@
 import json
 from django.http import HttpRequest, JsonResponse
 from rest_framework import viewsets
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.decorators import action
 from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 from authentication.service import get_user_by_id
@@ -66,6 +66,8 @@ class AuthenticatedStoreViewSet(viewsets.ViewSet):
         return JsonResponse(StoreSerializer(store).data, status=200)
     
 class StoreViewSet(viewsets.ViewSet):
+    permission_classes = [AllowAny]
+
     @action(detail=False, methods=['GET'])
     def get_store_by_id(self, request: HttpRequest, store_id: int) -> JsonResponse:
         store = service.get_store_by_id(store_id)

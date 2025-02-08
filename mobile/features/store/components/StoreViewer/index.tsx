@@ -4,7 +4,7 @@ import GoBackButton from "@/components/GoBackButton";
 import { ThemedText } from "@/components/ThemedText";
 import ProductDisplay from "../ProductDisplay";
 import PencilFill from "@/components/svgs/PencilFill";
-import { useRef, useState } from "react";
+import { Fragment, useRef, useState } from "react";
 import EditStore from "./EditStore";
 import { useGetUserStore } from "../../api";
 
@@ -17,7 +17,6 @@ export default function StoreViewer() {
 
     if(isLoading)
         return <View></View>   
-    
 
     const toggleEditMode = (value: boolean) => {
         // Start fade out

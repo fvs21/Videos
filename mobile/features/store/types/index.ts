@@ -12,7 +12,7 @@ export type ProductDisplay = {
     id: string;
     name: string;
     price: number;
-    product_image: string;
+    images_urls: string[];
 }
 
 export type Product = {

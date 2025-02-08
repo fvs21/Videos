@@ -46,7 +46,7 @@ export const styles = StyleSheet.create({
         borderRadius: 100,
     },
     productsContainer: {
-        padding: 14,
+        marginTop: 40,
         flex: 1,  // added flex: 1 to allow vertical centering
     },
     productsList: {
