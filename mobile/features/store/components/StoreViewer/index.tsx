@@ -4,7 +4,7 @@ import GoBackButton from "@/components/GoBackButton";
 import { ThemedText } from "@/components/ThemedText";
 import ProductDisplay from "../ProductDisplay";
 import PencilFill from "@/components/svgs/PencilFill";
-import { Fragment, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import EditStore from "./EditStore";
 import { useGetUserStore } from "../../api";
 
@@ -22,7 +22,7 @@ export default function StoreViewer() {
         // Start fade out
         Animated.timing(fadeAnim, {
             toValue: 0,
-            duration: 60,
+            duration: 100,
             useNativeDriver: true,
         }).start(() => {
             // Change mode after fade out
@@ -30,7 +30,7 @@ export default function StoreViewer() {
             // Start fade in
             Animated.timing(fadeAnim, {
                 toValue: 1,
-                duration: 60,
+                duration: 100,
                 useNativeDriver: true,
             }).start();
         });

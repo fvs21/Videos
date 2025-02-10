@@ -2,25 +2,21 @@ import PencilFill from "@/components/svgs/PencilFill";
 import { FlatList, Image, Modal, ScrollView, TouchableOpacity, useColorScheme, View } from "react-native";
 import { styles } from "./StoreViewer.style";
 import { ThemedText } from "@/components/ThemedText";
-import { Store } from "../../types";
 import ProductDisplay from "../ProductDisplay";
-import { ProductDisplay as PD } from "../../types";
 import CheckCircle from "@/components/svgs/CheckCircle";
 import PlusLg from "@/components/svgs/PlusLg";
 import { Fragment, useState } from "react";
 import GoBackButton from "@/components/GoBackButton";
-import XLg from "@/components/svgs/XLg";
 import { Colors } from "@/styles/variables";
 import { useGetUserStore } from "../../api";
-import ThemedSafeAreaView from "@/components/ThemedSafeAreaView";
-import CreateProduct from "../CreateProduct";
+import { useNavigation } from "@react-navigation/native";
 
 export default function EditStore({setEditMode}: {setEditMode: (value: boolean) => void}) {
     const isDark = useColorScheme() === "dark";
 
-    const [createProductModal, setCreateProductModal] = useState(false);
-
     const { data, isLoading } = useGetUserStore();
+
+    const navigator = useNavigation<any>();
 
     if(isLoading)
         return <View></View>
@@ -77,28 +73,10 @@ export default function EditStore({setEditMode}: {setEditMode: (value: boolean) 
                 </View>
             </ScrollView>
             <View style={styles.editableStoreFooter}>
-                <TouchableOpacity style={styles.addProductButton} onPress={() => setCreateProductModal(true)}>
+                <TouchableOpacity style={styles.addProductButton} onPress={() => navigator.navigate("CreateProduct")}>
                     <PlusLg width={24} color="black" />
                 </TouchableOpacity>
             </View>
-            <Modal
-                animationType="slide"
-                transparent={false}
-                visible={createProductModal}
-                onRequestClose={() => setCreateProductModal(false)}
-            >
-                <ThemedSafeAreaView style={{flex: 1, backgroundColor: isDark ? Colors.dark.background : Colors.light.background}}>
-                    <View style={styles.modalHeader}>
-                        <TouchableOpacity onPress={() => setCreateProductModal(false)}>
-                            <XLg width={24} color={isDark ? "white" : "black"} />
-                        </TouchableOpacity>
-                        <ThemedText type="title" weight="300" style={styles.modalTitle}>
-                            Add a product
-                        </ThemedText>
-                    </View>
-                    <CreateProduct />
-                </ThemedSafeAreaView>
-            </Modal>
         </Fragment>
     )
 }

@@ -5,8 +5,8 @@ import { View } from "react-native";
 
 export default function Configuration() {
     return (
-        <ThemedSafeAreaView>
+        <View>
             <Settings />
-        </ThemedSafeAreaView>
+        </View>
     )
 }

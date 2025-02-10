@@ -12,38 +12,41 @@ export default function Settings() {
     const theme = useColorScheme() ?? "light";
     const color = theme === "dark" ? "white" : "black";
 
-    const settingsOptionsCont = [styles.settingsOptionContainer, {borderColor: theme === "dark" ? Colors.dark.border : Colors.light.border}]
+    const settingsOptionsCont = [styles.settingsOptionContainer, {
+        borderBottomWidth: 6,
+        borderColor: theme === "dark" ? Colors.dark.inputColor : "#f2f2f2"
+    }]
 
     return (
-        <ScrollView style={{height: "100%"}}>
+        <ScrollView style={{height: "100%", backgroundColor: theme === "dark" ? Colors.dark.background : Colors.light.background}}>
             <View style={settingsOptionsCont}>
                 <Option 
                     option="Account" 
                     click={() => {}} 
-                    icon={<Person width={20} color={color} />}
+                    icon={<Person width={22} color={color} />}
                 />
                 <Option
                     option="Security"
                     click={() => {}}
-                    icon={<ShieldLock width={20} color={color} />}
+                    icon={<ShieldLock width={22} color={color} />}
                 />
                 <Option 
                     option="Addresses" 
                     click={() => {}}  
-                    icon={<Mailbox width={20} color={color} />}
+                    icon={<Mailbox width={22} color={color} />}
                 />
                 <Option
                     option="Payments"
                     click={() => {}}
-                    icon={<Wallet width={20} color={color} />}
+                    icon={<Wallet width={22} color={color} />}
                     borderBottom={false}
                 />
             </View>
-            <View style={settingsOptionsCont}>
+            <View>
                 <Option 
                     option="Log Out" 
                     click={() => {}} 
-                    icon={<BoxArrowLeft width={20} color={"red"} />}
+                    icon={<BoxArrowLeft width={22} color={"red"} />}
                     borderBottom={false}
                 />
             </View>

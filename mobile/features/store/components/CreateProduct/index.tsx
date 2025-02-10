@@ -34,7 +34,7 @@ export default function CreateProduct() {
     
     return (
         <ScrollView 
-            style={styles.createProductContainer}
+            style={[styles.createProductContainer, {backgroundColor: isDark ? Colors.dark.background : Colors.light.background}]}
             automaticallyAdjustKeyboardInsets
         >
             <View style={[styles.addImagesContainer, { 

@@ -15,7 +15,7 @@ export default function Option({option, icon, click, borderBottom = true}: Optio
     const borderColor = theme === "dark" ? Colors.dark.border : Colors.light.border;
 
     return (
-        <TouchableOpacity style={[styles.option, borderBottom && {borderBottomWidth: 1, borderBottomColor: borderColor}]} onPress={click}>
+        <TouchableOpacity style={[styles.option, borderBottom && {borderBottomWidth: 0, borderBottomColor: borderColor}]} onPress={click}>
             <View style={styles.optionIcon}>
                 {icon}
             </View>

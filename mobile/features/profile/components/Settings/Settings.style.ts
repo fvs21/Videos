@@ -7,7 +7,7 @@ export const styles = StyleSheet.create({
         paddingVertical: 12,
         flexDirection: "row",
         alignItems: "center",
-        gap: 15,
+        gap: 20,
     },
     optionIcon: {
         width: 20,
@@ -20,9 +20,8 @@ export const styles = StyleSheet.create({
         color: Colors.danger
     },
     settingsOptionContainer: {
-        margin: 16,
+        marginTop: 8,
         marginBottom: 8,
-        borderWidth: 1,
-        borderRadius: 14
+        paddingBottom: 8
     },
 })

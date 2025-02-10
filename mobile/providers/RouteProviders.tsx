@@ -4,7 +4,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Index from "@/app/(root)";
 import VerifyEmail from "@/app/(root)/(auth)/(verify-email)/verify-email";
 import More from "@/app/(root)/(more)/more";
-import Register from "@/app/(root)/(auth)/register/[step]";
+import Register from "@/app/(root)/(auth)/register/register";
 import GoBackButton from "@/components/GoBackButton";
 import { ThemedText } from "@/components/ThemedText";
 import TabsLayout from "@/app/(root)/(tabs)/_layout";
@@ -14,6 +14,9 @@ import EditProfile from "@/app/(root)/(tabs)/(profile)/(edit)/edit";
 import CreateStore from "@/app/(root)/(store)/(create)/create";
 import ViewStore from "@/app/(root)/(store)/(view)/view";
 import Setup from "@/app/(root)/(store)/setup/[step]";
+import CreateProduct from "@/features/store/components/CreateProduct";
+import GoBackButtonX from "@/components/GoBackButtonX";
+import ViewProduct from "@/app/(root)/(store)/product/view";
 
 const Stack = createNativeStackNavigator();
 
@@ -95,6 +98,31 @@ export default function RouteProviders() {
                 component={ViewStore}
                 options={{
                     headerShown: false,
+                }}
+            />
+            <Stack.Screen
+                name="CreateProduct"
+                component={CreateProduct}
+                options={{
+                    presentation: 'fullScreenModal',  
+                    headerStyle: {
+                        backgroundColor: isDark ? Colors.dark.background : Colors.light.background,
+                    },
+                    headerShown: true,
+                    headerLeft: () => <GoBackButtonX />,
+                    headerTitle: () => (
+                        <ThemedText weight='300' type='defaultSemiBold' style={{fontSize: 16}}>
+                            Create Product
+                        </ThemedText>
+                    ),
+                    headerShadowVisible: false,
+                }}
+            />
+            <Stack.Screen
+                name="ViewProduct"
+                component={ViewProduct}
+                options={{
+                    headerShown: false
                 }}
             />
         </Stack.Navigator>
