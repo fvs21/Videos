@@ -1,11 +1,13 @@
-import { View } from "react-native";
+import GoBackButton from "@/components/GoBackButton";
+import ThemedSafeAreaView from "@/components/ThemedSafeAreaView";
+import { ThemedText } from "@/components/ThemedText";
+import ProductViewer from "@/features/store/components/ProductViewer";
+import { Text, View } from "react-native";
 
-export default function ViewProduct({route}: {route: any}) {
-    const { product_id } = route.params.product_id;
+export default function ViewProduct({route}: any) {
+    const product_id = route.params.product_id;
 
     return (
-        <View>
-            
-        </View>
+        <ProductViewer product_id={product_id} />
     )
 }

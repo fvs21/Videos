@@ -15,6 +15,8 @@ export default function StoreViewer() {
 
     const { data, isLoading } = useGetUserStore();
 
+    const prods = [...data?.products as any[], ...data?.products as any[], ...data?.products as any[], ...data?.products as any[]];
+
     if(isLoading)
         return <View></View>   
 
@@ -80,7 +82,7 @@ export default function StoreViewer() {
                                 </View>
                             ) : (
                                 <FlatList
-                                    data={data?.products}
+                                    data={prods}
                                     renderItem={({ item }) => <ProductDisplay product={item} />}
                                     keyExtractor={(item) => item.id}
                                     contentContainerStyle={styles.productsList}

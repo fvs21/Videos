@@ -42,7 +42,7 @@ class Product(models.Model):
     
     def images_urls(self) -> list:
         return [
-            f"http://192.168.68.100:8000{image.image_url}" for image in self.images.all()
+            f"http://192.168.68.102:8000{image.image_url}" for image in self.images.all()
         ]
 
     def __str__(self) -> str:

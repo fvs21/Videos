@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from "@tanstack/react-query"
-import { CreateStoreRequest, Store } from "../types"
+import { CreateStoreRequest, Product, Store } from "../types"
 import { api, apiMultipart } from "@/api"
 import { useUser } from "@/store"
 
@@ -46,4 +46,17 @@ export const useCreateStore = () => {
         isPending,
         createStoreDisabled: isPending && !isError
     }
+}
+
+export const useGetProductInformation = (product_id: number) => {
+    const { data, isLoading } = useQuery({
+        queryKey: ['product-information', product_id],
+        queryFn: async (): Promise<Product> => {
+            const request = await api.get<Product>(`/store/product/${product_id}`);
+
+            return request.data;
+        }
+    });
+
+    return { data, isLoading };
 }

@@ -16,11 +16,13 @@ export type ProductDisplay = {
 }
 
 export type Product = {
-    id: string;
+    id: number;
     name: string;
-    price: number;
-    category: string;
-    images: string[];
+    price: string;
+    //category: string;
+    images_urls: string[];
+    description: string;
+    store: number;
     //more specific product information
 }
 

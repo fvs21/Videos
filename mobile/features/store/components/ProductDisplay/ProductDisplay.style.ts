@@ -8,7 +8,6 @@ export const styles = StyleSheet.create({
     },
     productImage: {
         aspectRatio: 1,
-        borderRadius: 10,
     },
     productTextContainer: {
         paddingTop: 4,
