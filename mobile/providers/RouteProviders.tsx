@@ -1,22 +1,22 @@
 import { useFetchUser } from "@/api/hooks/auth";
 import { useColorScheme, View } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import Index from "@/app/(root)";
-import VerifyEmail from "@/app/(root)/(auth)/(verify-email)/verify-email";
-import More from "@/app/(root)/(more)/more";
-import Register from "@/app/(root)/(auth)/register/register";
+import Index from "@/app/root";
+import VerifyEmail from "@/app/root/auth/verify-email/verify-email";
+import More from "@/app/root/more/more";
+import Register from "@/app/root/auth/register/register";
 import GoBackButton from "@/components/GoBackButton";
 import { ThemedText } from "@/components/ThemedText";
-import TabsLayout from "@/app/(root)/(tabs)/_layout";
-import Configuration from "@/app/(root)/(configuration)/configuration";
+import TabsLayout from "@/app/root/tabs/_layout";
+import Configuration from "@/app/root/configuration/configuration";
 import { Colors } from "@/styles/variables";
-import EditProfile from "@/app/(root)/(tabs)/(profile)/(edit)/edit";
-import CreateStore from "@/app/(root)/(store)/(create)/create";
-import ViewStore from "@/app/(root)/(store)/(view)/view";
-import Setup from "@/app/(root)/(store)/setup/[step]";
+import EditProfile from "@/app/root/tabs/profile/edit/edit";
+import CreateStore from "@/app/root/store/create/create";
+import ViewStore from "@/app/root/store/view/view";
+import Setup from "@/app/root/store/setup/[step]";
 import CreateProduct from "@/features/store/components/CreateProduct";
 import GoBackButtonX from "@/components/GoBackButtonX";
-import ViewProduct from "@/app/(root)/(store)/product/view";
+import ViewProduct from "@/app/root/store/product/view";
 
 const Stack = createNativeStackNavigator();
 
@@ -29,7 +29,7 @@ export default function RouteProviders() {
         return <View></View>
     }
 
-    if(!user && false) {
+    if(!user) {
         return (
             <Stack.Navigator screenOptions={{ headerShown: false }}>
                 <Stack.Screen name="Index" component={Index} />
@@ -38,7 +38,7 @@ export default function RouteProviders() {
         )
     }
 
-    if(!user?.has_email_verified && false) {
+    if(!user?.has_email_verified) {
         return (
             <Stack.Navigator screenOptions={{ headerShown: false }}>
                 <Stack.Screen name="verify-email" component={VerifyEmail} />

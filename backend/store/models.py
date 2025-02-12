@@ -1,3 +1,4 @@
+from unicodedata import category
 from django.db import models
 
 from image.models import Image
@@ -39,11 +40,25 @@ class Product(models.Model):
     images = models.ManyToManyField(Image)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    category = models.ForeignKey('Category')
     
     def images_urls(self) -> list:
         return [
-            f"http://192.168.68.102:8000{image.image_url}" for image in self.images.all()
+            f"http://192.168.68.103:8000{image.image_url}" for image in self.images.all()
         ]
 
     def __str__(self) -> str:
         return f"{self.name} - {self.store.name}"
+
+class Category(models.Model):
+    CATEGORY_CHOICES = [
+        ('Electronics', 'Electronics'),
+        ('Fashion & Accesories', 'Fashion & Accesories'),
+        ('Home', 'Home'),
+        ('Toys', 'Toys'),
+        ('Beauty & Health', 'Beauty & Health'),
+        ('Sports', 'Sports'),
+    ]
+    
+    name = models.CharField(max_length=50)
+    slug = models.SlugField(max_length=50)

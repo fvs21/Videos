@@ -48,6 +48,7 @@ export const useFetchUser = () => {
             const request = await api.get('/auth/session');
             return request.data;
         }, 
+        retry: false
     });
 
     return {

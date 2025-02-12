@@ -15,8 +15,6 @@ export const styles = StyleSheet.create({
     storeBody: {
         padding: 20,
         width: "100%",
-        height: "auto",
-        flex: 1
     },
     storeInfoContainer: {
         flexDirection: "row",
@@ -46,8 +44,9 @@ export const styles = StyleSheet.create({
         borderRadius: 100,
     },
     productsContainer: {
-        marginTop: 40,
-        flex: 1,  // added flex: 1 to allow vertical centering
+        flex: 1,  // added flex: 1 to allow vertical centering,
+        marginTop: 20,
+        paddingHorizontal: 10,
     },
     productsList: {
         flexWrap: "wrap",

@@ -1,6 +1,6 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Profile from "./(profile)/profile";
-import Home from "./(home)/home";
+import Profile from "./profile/profile";
+import Home from "./home/home";
 import { Text, useColorScheme, View } from "react-native";
 import HouseFill from "@/components/svgs/HouseFill";
 import House from "@/components/svgs/House";

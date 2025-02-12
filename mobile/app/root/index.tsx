@@ -2,11 +2,11 @@ import { Image, SafeAreaView, Text, TouchableOpacity, useColorScheme, View } fro
 import { styles } from './index.style';
 import icon from "@/assets/images/icon.png";
 import { useState } from 'react';
-import { Link, router } from 'expo-router';
 import { ThemedText } from '@/components/ThemedText';
 import AuthenticationInput from '@/components/AuthenticationInput';
 import { useNavigation } from '@react-navigation/native';
 import { useLogin } from '@/api/hooks/auth';
+import { flash } from '@/flash-message/flashMessageCreator';
 
 export default function Index() {
   const theme = useColorScheme() ?? 'light';
@@ -26,6 +26,7 @@ export default function Index() {
       await login({ credential, password });
     } catch(error) {
       console.log(error);
+      flash("Invalid credentials", 4000, "error")
     }
   }
 
@@ -58,9 +59,9 @@ export default function Index() {
         <TouchableOpacity style={styles.loginButton} onPress={handleSubmit}>
           <Text style={styles.loginButtonText}>Log in</Text>
         </TouchableOpacity>
-        <Link href={'/forgot-password'} style={styles.forgotButton}>
+        <TouchableOpacity>
           <ThemedText weight='300' type='defaultSemiBold'>Forgot password?</ThemedText>
-        </Link>
+        </TouchableOpacity>
       </View>
       <View style={styles.footer}>
         <TouchableOpacity style={styles.registerButton} onPress={() => navigation.push('Register', {step: '0'})}>

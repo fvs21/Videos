@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import AuthenticationProvider from '@/providers/AuthenticationProvider';
 import RouteProviders from '@/providers/RouteProviders';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
+import FlashRenderer from '@/flash-message/components/FlashRenderer';
 
 export default function Layout() {
   const [fontsLoaded] = useFonts({
@@ -34,6 +35,7 @@ export default function Layout() {
       <Provider>
         <AuthenticationProvider>
           <BottomSheetModalProvider>
+            <FlashRenderer />
             <RouteProviders />
           </BottomSheetModalProvider>
         </AuthenticationProvider>

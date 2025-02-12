@@ -6,6 +6,7 @@ import { styles } from "./ProductViewer.style";
 import { ThemedText } from "@/components/ThemedText";
 import { Product } from "../../types";
 import { useState } from "react";
+import { flash } from "@/flash-message/flashMessageCreator";
 
 
 export default function ProductViewer({product_id}: {product_id: number}) {
@@ -43,7 +44,7 @@ export default function ProductViewer({product_id}: {product_id: number}) {
                 </View>
             </ScrollView>
             <View style={[styles.addToCartOrBuyButtonContainer, {borderColor: isDark ? Colors.dark.border : Colors.light.border}]}>
-                <TouchableOpacity style={styles.buyButton}>
+                <TouchableOpacity style={styles.buyButton} onPress={() => flash("Product bought!", 3000, "success")}>
                     <Text style={{fontFamily: "Rubik-Regular", fontSize: 16, color: "white"}}>Buy</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={[styles.addToCartButton, {borderColor: isDark ? Colors.dark.border : Colors.light.border}]}>

@@ -1,6 +1,7 @@
+from unicodedata import category
 from rest_framework import serializers
 from django.core.files.uploadedfile import UploadedFile
-from store.models import Product, Store
+from store.models import Category, Product, Store
 from image.service import upload_image
 from user.models import User
 
@@ -93,6 +94,7 @@ class ProductSerializer(serializers.ModelSerializer):
     '''
     serializer for getting relevant fields in a product for display
     '''
+    category = serializers.ChoiceField(choices=Category.CATEGORY_CHOICES, source='get_category_display')
     class Meta:
         model = Product
         fields = [
@@ -101,7 +103,8 @@ class ProductSerializer(serializers.ModelSerializer):
             "description", 
             "price", 
             "images_urls", 
-            "store"
+            "store",
+            "category"
         ]
 
 

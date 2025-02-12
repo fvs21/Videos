@@ -15,7 +15,6 @@ export default function StoreViewer() {
 
     const { data, isLoading } = useGetUserStore();
 
-    const prods = [...data?.products as any[], ...data?.products as any[], ...data?.products as any[], ...data?.products as any[]];
 
     if(isLoading)
         return <View></View>   
@@ -73,25 +72,25 @@ export default function StoreViewer() {
                                 </View>
                             </View>
                         </View>
-                        <View style={styles.productsContainer}>
-                            {data?.products.length === 0 ? (
-                                <View style={styles.emptyStore}>
-                                    <ThemedText type="default" weight="300">
-                                        Empty store
-                                    </ThemedText>
-                                </View>
-                            ) : (
-                                <FlatList
-                                    data={prods}
-                                    renderItem={({ item }) => <ProductDisplay product={item} />}
-                                    keyExtractor={(item) => item.id}
-                                    contentContainerStyle={styles.productsList}
-                                    numColumns={2}
-                                    columnWrapperStyle={{ width: "100%", justifyContent: "space-between", gap: 20 }}
-                                    scrollEnabled={false}
-                                />
-                            )}
-                        </View>
+                    </View>
+                    <View style={styles.productsContainer}>
+                        {data?.products.length === 0 ? (
+                            <View style={styles.emptyStore}>
+                                <ThemedText type="default" weight="300">
+                                    Empty store
+                                </ThemedText>
+                            </View>
+                        ) : (
+                            <FlatList
+                                data={data?.products}
+                                renderItem={({ item }) => <ProductDisplay product={item} />}
+                                keyExtractor={(item) => item.id}
+                                contentContainerStyle={styles.productsList}
+                                numColumns={2}
+                                columnWrapperStyle={{ width: "100%", justifyContent: "space-between", gap: 20 }}
+                                scrollEnabled={false}
+                            />
+                        )}
                     </View>
                 </ScrollView>
             )}
