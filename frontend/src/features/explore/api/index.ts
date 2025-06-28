@@ -1,6 +1,6 @@
-import { api } from "@/api"
+import { api, apiMultiPart } from "@/api"
 import type { Post } from "@/types";
-import { useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery } from "@tanstack/react-query"
 
 export const useFeed = () => {
     const { data, isLoading } = useQuery({
@@ -13,4 +13,22 @@ export const useFeed = () => {
         refetchOnWindowFocus: false,
     })
     return { data, isLoading }
+}
+
+export const useCreatePost = () => {
+    const { mutateAsync: createPost, isPending } = useMutation({
+        mutationFn: async ({ description, video }: { description: string, video: File }) => {
+            const formData = new FormData();
+            formData.append("data", JSON.stringify({ description }));
+            formData.append("video", video);
+            const res = await apiMultiPart.post("/post/create", formData);
+
+            return res.data;
+        }
+    });
+
+    return {
+        createPost,
+        isPending
+    }
 }

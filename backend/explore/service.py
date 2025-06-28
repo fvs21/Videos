@@ -8,7 +8,7 @@ def get_all_posts(user: User):
     """
     # Get all posts excluding those already viewed by the user
     viewed_posts = View.objects.filter(viewer=user).values_list('post', flat=True)
-    all_posts = Post.objects.select_related('video').filter(video__status="completed").exclude(id__in=viewed_posts).all()
+    all_posts = Post.objects.select_related('video').filter(video__status="completed").exclude(id__in=viewed_posts).order_by('-created_at').all()
 
     return all_posts
 
