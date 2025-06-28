@@ -4,8 +4,8 @@ from post.serializers import CreatePostSerializer
 from user.models import User
 from django.core.files.uploadedfile import UploadedFile
 
-def create_post(user: User, json_data: dict, video: UploadedFile) -> Post:    
-    serializer = CreatePostSerializer(data={**json_data, "creator": user.id, "video_file": video})
+def create_post(json_data: dict, video: UploadedFile, creator: User) -> Post:    
+    serializer = CreatePostSerializer(data={**json_data, "video_file": video, "creator": creator.id})
     serializer.is_valid(raise_exception=True)
     return serializer.save()
 

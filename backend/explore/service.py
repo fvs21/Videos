@@ -1,6 +1,16 @@
-from post.models import Like, View
+from post.models import Like, Post, View
 from user.models import User
 from django.db.models import Count
+
+def get_all_posts(user: User):
+    """
+    Retrieves all posts from the database, excluding those already viewed by the user.
+    """
+    # Get all posts excluding those already viewed by the user
+    viewed_posts = View.objects.filter(viewer=user).values_list('post', flat=True)
+    all_posts = Post.objects.select_related('video').filter(video__status="completed").exclude(id__in=viewed_posts).all()
+
+    return all_posts
 
 def get_personalized_feed(user: User):
     #get the posts the user has liked and viewed

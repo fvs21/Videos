@@ -48,8 +48,7 @@ def generate_authentication_response(user: User) -> JsonResponse:
     return response
 
 def register_user(request: HttpRequest) -> User:
-    json = JSONParser().parse(request)
-    data = RegistrationSerializer(data=json)
+    data = RegistrationSerializer(data=request.data)
 
     if not data.is_valid():
         raise RegistrationException(data.errors, 400)
@@ -99,58 +98,6 @@ def logout_session(request: HttpRequest) -> None:
 
     newToken = RefreshToken(refresh_token)
     newToken.blacklist()
-
-def mobile_logout_session(request: HttpRequest) -> None:
-    auth = request.headers.get("Authorization", '')
-    refresh_token = auth.replace('Bearer ', '')
-
-    newToken = RefreshToken(refresh_token)
-    newToken.blacklist()
-
-def check_email_verification(request: HttpRequest) -> bool:
-    user: User = get_user_by_id(request.user.id)
-
-    verification_data = VerificationData.objects.filter(user=user, field="email").first()
-
-    if verification_data is None:
-        raise VerificationException("Email is already verified", 409) 
-    
-    json = JSONParser().parse(request)
-    verification_code = json.get("code")
-
-    if verification_code is None:
-        raise VerificationException("No verification code provided", 400)
-    
-    if not check_password(verification_code, verification_data.code):
-        return False
-    
-    if verification_data.is_code_expired():
-        raise VerificationException("Verification code expired", 400)
-    
-    user.email_verified_at = timezone.now()
-    user.save()
-
-    verification_data.delete()
-    return True
-
-def resend_email_verification_code(request: HttpRequest) -> bool:
-    user: User = get_user_by_id(request.user.id)
-
-    verification_data = VerificationData.objects.filter(user=user, field="email").first()
-
-    if verification_data is None:
-        raise VerificationException("Email is already verified", 409)
-    
-    if not verification_data.can_request_new_code():
-        return False
-    
-    verification_code = AuthenticationUtils.generate_verification_code()
-    verification_data.code = make_password(verification_code)
-    verification_data.save()
-
-    logging.info(f"Verification code for {user.email}: {verification_code}")
-
-    return True
 
 def get_user_by_unknown_credential(credential: str) -> Optional[User]:
     credential_type = AuthenticationUtils.determine_credential_type(credential)

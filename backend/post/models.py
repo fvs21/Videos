@@ -1,7 +1,6 @@
 import uuid
 from django.db import models
 
-from store.models import Product
 from user.models import User
 
 from django.utils.deconstruct import deconstructible
@@ -20,13 +19,12 @@ class PathName(object):
 
 # Create your models here.
 class Post(models.Model):
-    description = models.CharField(max_length=250)
+    description = models.CharField(max_length=250, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     creator = models.ForeignKey(User, on_delete=models.CASCADE)
     likes = models.BigIntegerField(default=0)
     comment_count = models.BigIntegerField(default=0)
     video = models.ForeignKey(Video, on_delete=models.CASCADE)
-    products = models.ManyToManyField(Product, related_name="posts")
     views = models.BigIntegerField(default=0)
 
     def trending_score(self) -> float:
@@ -34,6 +32,12 @@ class Post(models.Model):
         basic implementation of trending score for recomending posts to users
         '''
         return (self.likes * 2) + (self.comment_count * 1.5) + self.views
+    
+    def get_video_url(self) -> str:
+        '''
+        Returns the URL of the video associated with the post
+        '''
+        return "http://localhost:8000/api/video/playlist/" + self.video.id
 
 class Comment(models.Model):
     creator = models.ForeignKey(User, on_delete=models.CASCADE)

@@ -4,7 +4,7 @@ import uuid
 from django.http import Http404
 from video.exceptions import UnableToUploadVideoException, VideoFetchingException
 from video.models import Video
-from django.core.files.uploadedfile import UploadedFile, InMemoryUploadedFile
+from django.core.files.uploadedfile import UploadedFile
 from . tasks import process_video_task
 
 def generate_video_name(file: UploadedFile) -> str:

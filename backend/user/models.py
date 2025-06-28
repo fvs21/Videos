@@ -32,24 +32,12 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser):
     username = models.CharField(max_length=30, unique=True)
     email = models.EmailField(max_length=254, unique=True)
-    full_name = models.CharField(max_length=30)
-    date_of_birth = models.DateField()
-
-    country_code = models.IntegerField(null=True, blank=True)
-    phone = models.CharField(max_length=15, unique=True, null=True, blank=True)
-
-    email_verified_at = models.DateTimeField(null=True, blank=True)
-    phone_verified_at = models.DateTimeField(null=True, blank=True)
 
     profile_picture = models.ForeignKey(Image, on_delete=models.CASCADE, null=True, blank=True)
-
-    bio = models.CharField(max_length=200)
 
     password_reset_token = models.CharField(max_length=128, null=True, blank=True)
     password_reset_token_created_at = models.DateTimeField(null=True, blank=True)
     password_updated_at = models.DateTimeField(null=True, blank=True)
-
-    addresses = models.ManyToManyField("Address", blank=True)
 
     USERNAME_FIELD = "username"
     REQUIRED_FIELDS = ["email", "date_of_birth", "password"]
@@ -69,9 +57,8 @@ class User(AbstractBaseUser):
         return VerificationData.objects.get(user=self, field="email").code
 
     def pfp_url(self) -> str:
-        return "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg"
         if self.profile_picture is None:
-            return "/api/image/default-pfp.jpg"
+            return "https://cdn.pfps.gg/pfps/2301-default-2.png"
         return self.profile_picture.image_url
         
 
@@ -101,14 +88,3 @@ class VerificationData(models.Model):
     
     def is_code_expired(self) -> bool:
         return self.created_at + timedelta(minutes=5) < timezone.now()
-
-class Address(models.Model):
-    name = models.CharField(max_length=30)
-    country = models.CharField(max_length=60)
-    state = models.CharField(max_length=60)
-    city = models.CharField(max_length=60)
-    address = models.CharField(max_length=1024)
-    zip_code = models.CharField(max_length=12)
-
-    def __str__(self) -> str:
-        return f"{self.name} - {self.address} - {self.city} - {self.state} - {self.country} - {self.zip_code}"

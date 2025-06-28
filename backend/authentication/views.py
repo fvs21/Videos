@@ -1,13 +1,12 @@
-from rest_framework.decorators import api_view, permission_classes, authentication_classes
+from rest_framework.decorators import api_view
 from django.http import HttpRequest
 from django.http import JsonResponse
 
-from authentication.exceptions import RefreshTokenException
 from user.models import User
 from . import service
 from rest_framework import viewsets
 from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticated
 from backend.permissions import OnlyGuests
 
 class AuthenticationViewSet(viewsets.ViewSet):
@@ -60,28 +59,6 @@ class AuthenticatedAuthViewSet(viewsets.ViewSet):
         service.logout_session(request)
         return JsonResponse({"error": False, "message": "Succesfully logged out"}, status=200)
     
-    @action(methods=["POST"], detail=False)
-    def mobile_logout(self, request: HttpRequest) -> JsonResponse:
-        service.mobile_logout_session(request)
-        return JsonResponse({"error": False, "message": "Succesfully logged out"}, status=200)
-    
-    @action(methods=["POST"], detail=False)
-    def verify_email(self, request: HttpRequest) -> JsonResponse:
-        result: bool = service.check_email_verification(request)
-
-        if result:
-            return JsonResponse({"error": False, "message": "Email successfully verified"}, status=200)
-        
-        return JsonResponse({"error": True, "message": "Incorrect verification code"}, status=400)
-    
-    @action(methods=['POST'], detail=False)
-    def request_email_verification_code(self, request: HttpRequest) -> JsonResponse:
-        result: bool = service.resend_email_verification_code(request)
-
-        if result:
-            return JsonResponse({"error": False, "message": "Verification code sent"}, status=200)
-        
-        return JsonResponse({"error": True, "message": "You need to wait 5 minutes to request a new verification code"}, status=429)
 
     
 @api_view(["GET"])
@@ -89,24 +66,6 @@ def refresh(request: HttpRequest) -> JsonResponse:
     refresh_token = request.COOKIES.get("user_r")
     token = service.process_refresh_token(refresh_token)
 
-    if not token:
-        return JsonResponse({"error": True, "message": "Invalid or missing refresh token"}, status=401)
-    
-    return JsonResponse({"error": False, "access_token": str(token.access_token)}, status=200)
-
-@api_view(["GET"])
-@permission_classes([AllowAny]) #change to isauthenticated for mobile
-@authentication_classes([])
-def mobile_refresh(request: HttpRequest) -> JsonResponse:
-    auth = request.headers.get("Authorization", '')
-
-    if auth is None:
-        return JsonResponse({"error": True, "message": "No authorization header provided"}, status=401)
-
-    refresh_token = auth.replace('Bearer ', '')
-
-    token = service.process_refresh_token(refresh_token)
-    
     if not token:
         return JsonResponse({"error": True, "message": "Invalid or missing refresh token"}, status=401)
     
